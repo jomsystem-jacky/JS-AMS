@@ -1,0 +1,50 @@
+﻿@model LogViewModel
+<div class="card card-custom my-5">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+                Data Information
+            </h3>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="m-form__group ps-form-group">
+                    <label class="col-sm-5 col-form-label text-right title-label">Created By</label>
+                    <div class="col-sm-7">
+                        <span class="value-label">@Model.CreatedBy</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="m-form__group ps-form-group">
+                    <label class="col-sm-5 col-form-label text-right title-label">Modified By</label>
+                    <div class="col-sm-7">
+                        <span class="value-label">@Model.UpdatedBy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="m-form__group ps-form-group">
+                    <label class="col-sm-5 col-form-label text-right title-label">Created At</label>
+                    <div class="col-sm-7">
+                        <span class="value-label">@Model.CreatedAt</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="m-form__group ps-form-group">
+                    <label class="col-sm-5 col-form-label text-right title-label">Modified At</label>
+                    <div class="col-sm-7">
+                        <span class="value-label">@Model.UpdatedAt</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
