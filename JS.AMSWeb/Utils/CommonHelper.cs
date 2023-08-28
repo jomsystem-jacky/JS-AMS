@@ -62,35 +62,35 @@ namespace JS.BPOSWeb.Utils
                 return urlParts[0];
             }
         }
-        public static string CombineLocationToFullAddress(Location location)
-        {
-            string address = "";
-            if (string.IsNullOrEmpty(location.Address))
-            {
-                address = location.AddressOne + " " + location.AddressTwo + " ";
-            }
-            else
-            {
-                address = location.Address + " ";
-            }
+        //public static string CombineLocationToFullAddress(Location location)
+        //{
+        //    string address = "";
+        //    if (string.IsNullOrEmpty(location.Address))
+        //    {
+        //        address = location.AddressOne + " " + location.AddressTwo + " ";
+        //    }
+        //    else
+        //    {
+        //        address = location.Address + " ";
+        //    }
 
-            if (location.PostalCode.HasValue)
-            {
-                address += location.PostalCode.Value + " ";
-            }
+        //    if (location.PostalCode.HasValue)
+        //    {
+        //        address += location.PostalCode.Value + " ";
+        //    }
 
-            if (location.City != null)
-            {
-                address += location.City.Name + " ";
-            }
+        //    if (location.City != null)
+        //    {
+        //        address += location.City.Name + " ";
+        //    }
 
-            if (location.City?.State != null)
-            {
-                address += location.City.State.Name;
-            }
+        //    if (location.City?.State != null)
+        //    {
+        //        address += location.City.State.Name;
+        //    }
 
-            return address;
-        }
+        //    return address;
+        //}
 
         public static bool IsValidEmail(string emailaddress)
         {
