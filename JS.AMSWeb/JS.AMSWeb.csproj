@@ -10,6 +10,13 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
+    <None Remove="Areas\CompanyModule\" />
+    <None Remove="Areas\CompanyModule\Views\" />
+    <None Remove="Areas\CompanyModule\ViewModels\" />
+    <None Remove="Areas\CompanyModule\ViewModels\CompanyProfile\" />
+    <None Remove="Areas\CompanyModule\Views\CompanyProfile\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
 
@@ -45,4 +52,11 @@
     <ProjectReference Include="..\JS.AMS.Data\JS.AMS.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\CompanyModule\" />
+    <Folder Include="Areas\CompanyModule\Views\" />
+    <Folder Include="Areas\CompanyModule\ViewModels\" />
+    <Folder Include="Areas\CompanyModule\ViewModels\CompanyProfile\" />
+    <Folder Include="Areas\CompanyModule\Views\CompanyProfile\" />
+  </ItemGroup>
 </Project>
