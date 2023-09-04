@@ -1,0 +1,133 @@
+﻿
+@using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetType;
+@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<AssetTypeViewModel>
+
+@{
+    <style>
+        .pagination-sm a {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .pagination a {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .pagination li {
+            max-width: 50px;
+        }
+
+        .pagination .active {
+            background-color: #3699FF;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .pagination a:hover {
+            background-color: #3699FF;
+            color: white;
+        }
+    </style>
+}
+
+@{
+    int currentPage = Model.PageNumber;
+    int totalPages = Model.PageCount;
+    int visiblePages = 10; // Number of page links to display
+
+    int startPage = Math.Max(currentPage - (visiblePages / 2), 1);
+    int endPage = Math.Min(startPage + visiblePages - 1, totalPages);
+
+    bool showPrevious = currentPage > 1;
+    bool showNext = currentPage < totalPages;
+}
+
+@if (Model.TotalItemCount != 0)
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex flex-wrap align-items-center justify-content-lg-start justify-content-center">
+                <nav>
+                    <ul class="pagination">
+
+                        <li>
+                            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" asp-route-page="1" asp-route-searchName="@ViewData["SearchName"]">
+                                <i class="ki ki-double-arrow-back icon-xs"></i>
+                            </a>
+                        </li>
+
+                        @if (showPrevious)
+                        {
+                            <li>
+                                <a class="btn btn-icon btn-sm btn-light mr-2 my-1" asp-route-page="@(@Model.PageNumber - 1)" asp-route-searchName="@ViewData["SearchName"]">
+                                    <i class="ki ki-arrow-back icon-xs"></i>
+                                </a>
+                            </li>
+                        }
+
+                        @if (currentPage - 5 > 0)
+                        {
+                            <li>
+                                <a class="btn btn-icon btn-sm btn-light mr-2 my-1" asp-route-page="@(@Model.PageNumber - 5)" asp-route-searchName="@ViewData["SearchName"]">
+                                    <i class="ki ki-more-hor icon-xs"></i>
+                                </a>
+                            </li>
+                        }
+
+                        @for (int i = startPage; i <= endPage; i++)
+                        {
+                            if (i == currentPage)
+                            {
+                                <li><a class="btn btn-icon btn-sm border-0 btn-light btn-hover-primary active mr-2 my-1" asp-route-page="@i" asp-route-searchName="@ViewData["SearchName"]">@i</a></li>
+                            }
+                            else
+                            {
+                                <li><a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" asp-route-page="@i" asp-route-searchName="@ViewData["SearchName"]">@i</a></li>
+                            }
+                        }
+
+                        @if (currentPage + 5 <= Model.PageCount)
+                        {
+                            <li>
+                                <a class="btn btn-icon btn-sm btn-light mr-2 my-1" asp-route-page="@(@Model.PageNumber + 5)" asp-route-searchName="@ViewData["SearchName"]">
+                                    <i class="ki ki-more-hor icon-xs"></i>
+                                </a>
+                            </li>
+                        }
+
+                        @if (showNext)
+                        {
+                            <li>
+                                <a class="btn btn-icon btn-sm btn-light mr-2 my-1" asp-route-page="@(@Model.PageNumber + 1)" asp-route-searchName="@ViewData["SearchName"]">
+                                    <i class="ki ki-arrow-next icon-xs"></i>
+                                </a>
+                            </li>
+                        }
+
+                        <li>
+                            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" asp-route-page="@Model.PageCount" asp-route-searchName="@ViewData["SearchName"]">
+                                <i class="ki ki-double-arrow-next icon-xs"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="d-flex pt-lg-3 justify-content-lg-start justify-content-center">
+                <div>Showing @Model.FirstItemOnPage - @Model.LastItemOnPage of @Model.TotalItemCount</div>
+            </div>
+        </div>
+    </div>
+}
