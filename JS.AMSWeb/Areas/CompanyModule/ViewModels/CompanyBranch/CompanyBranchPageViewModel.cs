@@ -1,14 +1,14 @@
 ﻿using System;
 using JS.AMS.Data.Entity.AssetModule;
 using JS.AMS.Data.Entity.CompanyModule;
+using JS.AMSWeb.Areas.CompanyModule.ViewModels.CompanyBranch;
 
-
-namespace JS.AMSWeb.Areas.CompanyModule.ViewModels.CompanyProfile
+namespace JS.AMSWeb.Areas.CompanyModule.ViewModels.CompanyBranch
 {
-	public class CompanyProfilePageViewModel
-	{
-        public X.PagedList.IPagedList<CompanyProfileViewModel> Listing { get; set; }
-        public AddCompanyProfileViewModel AddCompanyProfileDTO { get; set; }
+	public class CompanyBranchPageViewModel
+    {
+        public X.PagedList.IPagedList<CompanyBranchViewModel> Listing { get; set; }
+        public AddCompanyBranchViewModel AddCompanyBranchDTO { get; set; }
 
         //public List<AssetInfo> CompanyAssetInfos { get; set; } = new List<AssetInfo>();
         //public List<Staff> CompanyStaffs { get; set; } = new List<Staff>();

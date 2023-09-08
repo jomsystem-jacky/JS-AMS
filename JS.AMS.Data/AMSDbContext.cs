@@ -36,6 +36,7 @@ namespace JS.AMS.Data
         public DbSet<UserAccount> UserAccounts { get; set; }
         public DbSet<UserAccountAccess> UserAccountAccesses { get; set; }
         public DbSet<AccessInfo> AccessInfos { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

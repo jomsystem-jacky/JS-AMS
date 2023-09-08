@@ -53,9 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\CompanyModule\" />
-    <Folder Include="Areas\CompanyModule\Views\" />
-    <Folder Include="Areas\CompanyModule\ViewModels\" />
     <Folder Include="Areas\CompanyModule\ViewModels\CompanyProfile\" />
     <Folder Include="Areas\CompanyModule\Views\CompanyProfile\" />
   </ItemGroup>
