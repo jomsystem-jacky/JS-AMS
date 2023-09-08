@@ -29,7 +29,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
 
-            var assetInfo = _db.AccessInfos
+            var assetInfo = _db.AssetInfos
                 .Where(x => x.Active);
 
             var listVm = new List<AssetInfoViewModel>();
@@ -42,6 +42,8 @@ namespace JS.AMSWeb.Areas.AssetModule
                 vm.Name = a.Name;
                 vm.Code = a.Code;
                 vm.Remark = a.Remark;
+                vm.CompanyProfileId = a.CompanyProfileId;
+                vm.AssetTypeId = a.AssetTypeId;
 
                 listVm.Add(vm);
             }
@@ -109,6 +111,8 @@ namespace JS.AMSWeb.Areas.AssetModule
             vm.Name = assetInfo.Name;
             vm.Code = assetInfo.Code;
             vm.Remark = assetInfo.Remark;
+            vm.CompanyProfileId = assetInfo.CompanyProfileId;
+            vm.AssetTypeId = assetInfo.AssetTypeId;
 
             ViewBag.CompanyProfiles = new SelectList(_db.CompanyProfiles.Where(x => x.Active), "Id", "Name");
             ViewBag.AssetTypes = new SelectList(_db.AssetTypes.Where(x => x.Active), "Id", "Name");
@@ -132,6 +136,8 @@ namespace JS.AMSWeb.Areas.AssetModule
                 assetInfo.Name = dto.Name;
                 assetInfo.Code = dto.Code;
                 assetInfo.Remark = dto.Remark;
+                assetInfo.CompanyProfileId = dto.CompanyProfileId;
+                assetInfo.AssetTypeId = dto.AssetTypeId;
                 
                 _db.AssetInfos.Update(assetInfo);
                 await _db.SaveChangesAsync("system");
@@ -158,6 +164,8 @@ namespace JS.AMSWeb.Areas.AssetModule
             vm.Name = assetInfo.Name;
             vm.Code = assetInfo.Code;
             vm.Remark = assetInfo.Remark;
+            vm.CompanyProfileId = assetInfo.CompanyProfileId;
+            vm.AssetTypeId = assetInfo.AssetTypeId;
 
             ViewBag.CompanyProfiles = new SelectList(_db.CompanyProfiles.Where(x => x.Active), "Id", "Name");
             ViewBag.AssetTypes = new SelectList(_db.AssetTypes.Where(x => x.Active), "Id", "Name");
