@@ -36,7 +36,7 @@ License: For each use you must have a valid license purchased only from above li
     <link rel="shortcut icon" href="~/media/logos/favicon.ico" />
     <!--begin::Fonts(mandatory for all pages)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
-    <!--end::Fonts-->
+    @*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>*@
     <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
     <link href="~/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="~/css/style.bundle.css" rel="stylesheet" type="text/css" />
@@ -75,23 +75,19 @@ License: For each use you must have a valid license purchased only from above li
                     </div>
                     <!--end::Logo-->
                     <!--begin::Title-->
-                    
                     <!--end::Title-->
                 </div>
                 <!--begin::Aside-->
             </div>
-
-
-
             <!--begin::Aside-->
             <!--begin::Body-->
             <div class="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
                 <!--begin::Card-->
-                <div class="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-600px p-20">
+                <div class="login-form bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-600px p-20">
                     <!--begin::Wrapper-->
                     <div class="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-15 pb-lg-20">
                         <!--begin::Form-->
-                        <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="../../demo23/dist/index.html" action="#">
+                        <form class="form  w-100" novalidate="novalidate" id="kt_login_signin_form" method="post">
                             <!--begin::Heading-->
                             <div class="text-center mb-11">
                                 <!--begin::Title-->
@@ -108,19 +104,19 @@ License: For each use you must have a valid license purchased only from above li
                             <!--begin::Input group=-->
                             <div class="fv-row mb-8">
                                 <!--begin::Email-->
-                                <input type="text" placeholder="Email" name="email" autocomplete="off" class="form-control bg-transparent" />
+                                <input id="signin-username" type="text" placeholder="Email" name="signin-username" autocomplete="off" class="form-control bg-transparent form-control-solid h-auto py-7 px-6 rounded-lg" />
                                 <!--end::Email-->
                             </div>
                             <!--end::Input group=-->
                             <div class="fv-row mb-3">
                                 <!--begin::Password-->
-                                <input type="password" placeholder="Password" name="password" autocomplete="off" class="form-control bg-transparent" />
+                                <input type="password" id="signin-password" placeholder="Password" name="signin-password" autocomplete="off" class="form-control bg-transparent form-control-solid h-auto py-7 px-6 rounded-lg" />
                                 <!--end::Password-->
                             </div>
                             <!--end::Input group=-->
                             <!--begin::Submit button-->
                             <div class="d-grid mb-10 p-10">
-                                <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">
+                                <button type="submit" id="kt_login_signin_submit" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3">
                                     <!--begin::Indicator label-->
                                     <span class="indicator-label">Sign In</span>
                                     <!--end::Indicator label-->
@@ -150,21 +146,25 @@ License: For each use you must have a valid license purchased only from above li
     <!--end::Root-->
     <!--begin::Javascript-->
     <script>var hostUrl = "assets/";</script>
+
+    <script src="~/js/custom/pages/login/login.js"></script>
+    <script src="~/js/custom/pages/login/login.min.js"></script>
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
     <script src="~/plugins/global/plugins.bundle.js"></script>
     <script src="~/js/scripts.bundle.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <!--end::Global Javascript Bundle-->
     <!--begin::Custom Javascript(used for this page only)-->
     <script src="~/js/custom/authentication/sign-in/general.js"></script>
     <!--end::Custom Javascript-->
     <!--end::Javascript-->
     @*<div class="app-container container-xxl d-flex flex-column flex-md-row flex-center flex-md-stack py-3">*@
-        <!--begin::Copyright-->
-        <div class="text-dark order-2 order-md-1">
-            <span class="text-muted fw-semibold me-1">2023©</span>
-            <a href="https://www.jomsystem.com" target="_blank" class="text-gray-800 text-hover-primary">JOM SYSTEM POS SYSTEM</a>
-        </div>
-        <!--end::Copyright-->
+    <!--begin::Copyright-->
+    <div class="text-dark order-2 order-md-1">
+        <span class="text-muted fw-semibold me-1">2023©</span>
+        <a href="https://www.jomsystem.com" target="_blank" class="text-gray-800 text-hover-primary">JOM SYSTEM POS SYSTEM</a>
+    </div>
+    <!--end::Copyright-->
     @*</div>*@
 </body>
 <!--end::Body-->

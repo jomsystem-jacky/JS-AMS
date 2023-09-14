@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 //using JS.AMS.Data.Entity.Shared;
 
-namespace JS.BPOSWeb.Utils
+namespace JS.AMSWeb.Utils
 {
     public static class CommonHelper
     {

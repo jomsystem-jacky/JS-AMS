@@ -15,7 +15,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        return RedirectToAction("Index", new { area = "Dashboard", controller = "Home" });
     }
 
     public IActionResult Privacy()

@@ -15,6 +15,24 @@
     <None Remove="Areas\CompanyModule\ViewModels\" />
     <None Remove="Areas\CompanyModule\ViewModels\CompanyProfile\" />
     <None Remove="Areas\CompanyModule\Views\CompanyProfile\" />
+    <None Remove="Areas\UserModule\" />
+    <None Remove="Areas\UserModule\Views\" />
+    <None Remove="Areas\UserModule\ViewModels\" />
+    <None Remove="Areas\UserModule\Views\AccessInfo\" />
+    <None Remove="Areas\UserModule\ViewModels\AccessInfo\" />
+    <None Remove="Areas\UserModule\Views\UserAccountAccess\" />
+    <None Remove="Areas\UserModule\Views\UserAccount\" />
+    <None Remove="Areas\UserModule\ViewModels\UserAccount\" />
+    <None Remove="Areas\UserModule\ViewModels\UserAccountAccess\" />
+    <None Remove="Areas\Dashboard\" />
+    <None Remove="Areas\Dashboard\ViewModels\" />
+    <None Remove="Areas\Dashboard\Views\" />
+    <None Remove="Areas\Dashboard\Controllers\" />
+    <None Remove="DTO\" />
+    <None Remove="DTO\Identity\" />
+    <None Remove="Areas\Dashboard\Views\Home\" />
+    <None Remove="Areas\Account\" />
+    <None Remove="ApiController\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
@@ -55,5 +73,23 @@
   <ItemGroup>
     <Folder Include="Areas\CompanyModule\ViewModels\CompanyProfile\" />
     <Folder Include="Areas\CompanyModule\Views\CompanyProfile\" />
+    <Folder Include="Areas\UserModule\" />
+    <Folder Include="Areas\UserModule\Views\" />
+    <Folder Include="Areas\UserModule\ViewModels\" />
+    <Folder Include="Areas\UserModule\Views\AccessInfo\" />
+    <Folder Include="Areas\UserModule\ViewModels\AccessInfo\" />
+    <Folder Include="Areas\UserModule\Views\UserAccountAccess\" />
+    <Folder Include="Areas\UserModule\Views\UserAccount\" />
+    <Folder Include="Areas\UserModule\ViewModels\UserAccount\" />
+    <Folder Include="Areas\UserModule\ViewModels\UserAccountAccess\" />
+    <Folder Include="Areas\Dashboard\" />
+    <Folder Include="Areas\Dashboard\ViewModels\" />
+    <Folder Include="Areas\Dashboard\Views\" />
+    <Folder Include="Areas\Dashboard\Controllers\" />
+    <Folder Include="DTO\" />
+    <Folder Include="DTO\Identity\" />
+    <Folder Include="Areas\Dashboard\Views\Home\" />
+    <Folder Include="Areas\Account\" />
+    <Folder Include="ApiController\" />
   </ItemGroup>
 </Project>
