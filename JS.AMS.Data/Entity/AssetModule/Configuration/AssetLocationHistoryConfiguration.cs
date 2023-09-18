@@ -33,7 +33,7 @@ namespace JS.AMS.Data.Entity.AssetModule.Configuration
             builder.HasOne(x => x.AssignedByStaff)
                 .WithMany(x => x.AssignedStaffAssetLocationHistories)
                 .HasForeignKey(x => x.AssignedByStaffId)
-                .IsRequired(true)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

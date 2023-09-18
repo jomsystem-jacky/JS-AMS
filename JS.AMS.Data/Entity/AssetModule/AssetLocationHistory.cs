@@ -14,7 +14,7 @@ namespace JS.AMS.Data.Entity.AssetModule
         public DateTime? AssignedDate { get; set; }
         public DateTime? ReturnedDate { get; set; }
 
-        public Guid AssignedByStaffId { get; set; }
-        public Staff? AssignedByStaff { get; set; }
+        public Guid? AssignedByStaffId { get; set; }
+        public Staff AssignedByStaff { get; set; }
     }
 }
