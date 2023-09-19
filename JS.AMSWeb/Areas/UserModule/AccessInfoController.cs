@@ -9,6 +9,8 @@ using JS.AMS.Data;
 using Humanizer;
 using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMS.Data.Entity.User;
+using JS.AMSWeb.DTO.Identity;
+using JS.AMSWeb.Utils;
 
 namespace JS.AMSWeb.Areas.UserModule
 {
@@ -28,6 +30,11 @@ namespace JS.AMSWeb.Areas.UserModule
         {
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
 
             var accessInfos = _db.AccessInfos
                 .Where(x => x.Active);
@@ -78,6 +85,11 @@ namespace JS.AMSWeb.Areas.UserModule
 
         public IActionResult Edit(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var accessInfo = _db.AccessInfos
                 .FirstOrDefault(x => x.Id == id);
             if (accessInfo == null)
@@ -125,6 +137,11 @@ namespace JS.AMSWeb.Areas.UserModule
 
         public IActionResult Delete(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var accessInfo = _db.AccessInfos
                 .FirstOrDefault(x => x.Id == id);
             if (accessInfo == null)
