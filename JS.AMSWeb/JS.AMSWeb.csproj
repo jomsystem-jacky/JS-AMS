@@ -91,5 +91,9 @@
     <Folder Include="Areas\Dashboard\Views\Home\" />
     <Folder Include="Areas\Account\" />
     <Folder Include="ApiController\" />
+    <Folder Include="wwwroot\js\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\js\Shared\" />
   </ItemGroup>
 </Project>

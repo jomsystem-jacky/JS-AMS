@@ -94,10 +94,10 @@ License: For each use you must have a valid license purchased only from above li
                                 <h1 class="text-dark fw-bolder mb-3">Sign In</h1>
                                 <!--end::Title-->
                                 <!--begin::Subtitle-->
-                                <span class="text-muted font-weight-bold font-size-h4">
-                                    New Here?
-                                    <a href="javascript:;" id="kt_login_signup" class="text-primary font-weight-bolder">Create an Account</a>
-                                </span>
+                                @*<span class="text-muted font-weight-bold font-size-h4">
+                                        New Here?
+                                        <a href="javascript:;" id="kt_login_signup" class="text-primary font-weight-bolder">Create an Account</a>
+                                    </span>*@
                                 <!--end::Subtitle=-->
                             </div>
                             <!--begin::Heading-->
@@ -116,7 +116,7 @@ License: For each use you must have a valid license purchased only from above li
                             <!--end::Input group=-->
                             <!--begin::Submit button-->
                             <div class="d-grid mb-10 p-10">
-                                <button type="submit" id="kt_login_signin_submit" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3">
+                                <a onclick="SignIn()" id="kt_login_signin_submit" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3">
                                     <!--begin::Indicator label-->
                                     <span class="indicator-label">Sign In</span>
                                     <!--end::Indicator label-->
@@ -126,7 +126,7 @@ License: For each use you must have a valid license purchased only from above li
                                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                     </span>
                                     <!--end::Indicator progress-->
-                                </button>
+                                </a>
                             </div>
 
                             <!--end::Submit button-->
@@ -145,17 +145,10 @@ License: For each use you must have a valid license purchased only from above li
     </div>
     <!--end::Root-->
     <!--begin::Javascript-->
-    <script>var hostUrl = "assets/";</script>
-
-    <script src="~/js/custom/pages/login/login.js"></script>
-    <script src="~/js/custom/pages/login/login.min.js"></script>
+    @*<script>var hostUrl = "assets/";</script>*@
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
-    <script src="~/plugins/global/plugins.bundle.js"></script>
-    <script src="~/js/scripts.bundle.js"></script>
-    <script src="~/lib/jquery/dist/jquery.js"></script>
     <!--end::Global Javascript Bundle-->
     <!--begin::Custom Javascript(used for this page only)-->
-    <script src="~/js/custom/authentication/sign-in/general.js"></script>
     <!--end::Custom Javascript-->
     <!--end::Javascript-->
     @*<div class="app-container container-xxl d-flex flex-column flex-md-row flex-center flex-md-stack py-3">*@
@@ -169,3 +162,10 @@ License: For each use you must have a valid license purchased only from above li
 </body>
 <!--end::Body-->
 </html>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+<script src="~/plugins/global/plugins.bundle.js"></script>
+<script src="~/plugins/custom/prismjs/prismjs.bundle.js"></script>
+<script src="~/js/scripts.bundle.js"></script>
+<script src="~/js/custom/pages/login/login.js"></script>
+<script src="~/js/Shared/UserDialog.js"></script>
