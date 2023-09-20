@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using JS.AMSWeb.Areas.UserModule.ViewModels.UserAccountAccess;
 using JS.AMSWeb.Areas.UserModule.ViewModels.AccountAccess;
 using Humanizer;
+using JS.AMSWeb.DTO.Identity;
+using JS.AMSWeb.Utils;
 
 namespace JS.AMSWeb.Areas.UserModule
 {
@@ -29,6 +31,11 @@ namespace JS.AMSWeb.Areas.UserModule
 
         public IActionResult Index(int? page, string UserAccountId)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
             var userAccount = _db.UserAccounts
@@ -69,6 +76,11 @@ namespace JS.AMSWeb.Areas.UserModule
 
         public IActionResult Create(string UserAccountId)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var userAccount = _db.UserAccounts
                 .Include(m => m.UserAccountAccesses).ThenInclude(m => m.AccessInfo)
                 .FirstOrDefault(m => m.Id == UserAccountId);
@@ -161,6 +173,11 @@ namespace JS.AMSWeb.Areas.UserModule
         [HttpPost]
         public async Task<IActionResult> Delete(ManageUserAccountAccessViewModel dto, Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             try
             {
                 var userAccountAccess = _db.UserAccountAccesses
