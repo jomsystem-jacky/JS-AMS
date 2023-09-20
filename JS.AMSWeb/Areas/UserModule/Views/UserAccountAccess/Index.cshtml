@@ -1,9 +1,9 @@
-﻿@using JS.AMSWeb.Areas.UserModule.ViewModels.AccessInfo;
+﻿@using JS.AMSWeb.Areas.UserModule.ViewModels.UserAccountAccess;
 @using X.PagedList.Mvc.Core
-@model UserAccountPageViewModel
+@model UserAccountAccessPageViewModel
 
 @{
-    ViewData["Title"] = "User Account List";
+    ViewData["Title"] = "Account Access";
 
 
 }
@@ -19,7 +19,7 @@
                     <!--begin::Page title-->
                     <div class="page-title d-flex flex-column justify-content-center me-3">
                         <!--begin::Title-->
-                        <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">User Account Listing</h1>
+                        <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">User Account Access</h1>
                         <!--end::Title-->
                         <!--begin::Breadcrumb-->
                         <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -34,7 +34,7 @@
                             </li>
                             <!--end::Item-->
                             <!--begin::Item-->
-                            <li class="breadcrumb-item text-muted">User Account</li>
+                            <li class="breadcrumb-item text-muted">User Account Access</li>
                             <!--end::Item-->
                             <!--begin::Item-->
                             <li class="breadcrumb-item">
@@ -42,7 +42,7 @@
                             </li>
                             <!--end::Item-->
                             <!--begin::Item-->
-                            <li class="breadcrumb-item text-muted">Listing</li>
+                            <li class="breadcrumb-item text-muted">Account Access</li>
                             <!--end::Item-->
                         </ul>
                         <!--end::Breadcrumb-->
@@ -55,7 +55,7 @@
                         <!--begin::Secondary button-->
                         <!--end::Secondary button-->
                         <!--begin::Primary button-->
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_ticket" class="btn btn-primary fw-bold fs-8 fs-lg-base">Add User Account</a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_ticket" class="btn btn-primary fw-bold fs-8 fs-lg-base">Add Account Access</a>
                         <!--end::Primary button-->
                     </div>
                     <!--end::Actions-->
@@ -73,7 +73,7 @@
                             <!--begin::Search-->
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
-                                <input type="text" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search User Account">
+                                <input type="text" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Account Access">
                             </div>
                             <!--end::Search-->
                         </div>
@@ -87,12 +87,7 @@
                                 <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_customers_table">
                                     <thead>
                                         <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Username" style="width: 30%">Username</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="First Name" style="width: 30%">First Name</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Last Name" style="width: 30% ">Last Name</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Nickname" style="width: 30% ">Nickname</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Ic/Passport" style="width: 30% ">Ic/Passport</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Birthday" style="width: 30% ">Date of Birth</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="AccessInfo" style="width: 30%">Account Access</th>
                                             <th class="text-end min-w-70px sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 102.640625px;">Actions</th>
                                         </tr>
                                     </thead>
@@ -102,12 +97,7 @@
                                             @foreach (var item in Model.Listing)
                                             {
                                                 <tr role="row" class="odd">
-                                                    <td>@item.Username</td>
-                                                    <td>@item.FirstName</td>
-                                                    <td>@item.LastName</td>
-                                                    <td>@item.Nickname</td>
-                                                    <td>@(item.IcPassport.Substring(0, item.IcPassport.Length - 6) + new string('*', 6))</td>
-                                                    <td>@string.Format("{0:yyyy-MM-dd}", item.Birthday)</td>
+                                                    <td>@item.AccessInfo</td>
                                                     <td>
                                                         <a href="#" class="btn btn-light btn-flex btn-center btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                                             Actions
@@ -115,20 +105,10 @@
                                                         </a>
                                                         <!--begin::Menu-->
                                                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-8 w-125px py-4" data-kt-menu="true" style="">
-                                                            <!--begin::Menu item-->
-                                                            <div class="menu-item px-3">
-                                                                <a asp-action="Edit" asp-route-id="@item.Id" class="menu-link px-3" title="Edit details">Edit</a>
-                                                            </div>
-                                                            <div class="menu-item px-3">
-                                                                <a asp-action="ChangePassword" asp-route-userId="@item.Id" class="menu-link px-3" title="Reset Password">Reset Password</a>
-                                                            </div>
-                                                            <div class="menu-item px-3">
-                                                                <a asp-controller="UserAccountAccess" asp-action="Index" asp-route-userAccountId="@item.Id" class="menu-link px-3" title="Reset Password">Account Access</a>
-                                                            </div>
                                                             <!--end::Menu item-->
                                                             <!--begin::Menu item-->
                                                             <div class="menu-item px-3">
-                                                                <a asp-action="Delete" asp-route-id="@item.Id" class="menu-link px-3" title="Delete details">Delete</a>
+                                                                <a asp-action="Delete" asp-route-id="@item.UserAccountId" class="menu-link px-3" title="Delete details">Delete</a>
                                                             </div>
                                                             <!--end::Menu item-->
                                                         </div>
@@ -174,103 +154,39 @@
                                     <!--begin::Heading-->
                                     <div class="mb-13 text-center">
                                         <!--begin::Title-->
-                                        <h1 class="mb-3">Add User Account</h1>
+                                        <h1 class="mb-3">Add Account Access</h1>
                                         <!--end::Title-->
                                         <!--begin::Description-->
                                         @*<div class="text-gray-400 fw-semibold fs-5">
-                                If you need more info, please check
-                                <a href="" class="fw-bold link-primary">Support Guidelines</a>.
-                                </div>*@
+                                        If you need more info, please check
+                                        <a href="" class="fw-bold link-primary">Support Guidelines</a>.
+                                        </div>*@
                                         <!--end::Description-->
                                     </div>
+                                    <div class="form-group pb-5">
+                                        <label asp-for="AddUserAccountAccessDTO.Username">Username</label>
+                                        <input asp-for="AddUserAccountAccessDTO.Username" class="form-control" disabled />
+                                        <span asp-validation-for="AddUserAccountAccessDTO.Username" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group pb-5">
+                                        <label asp-for="AddUserAccountAccessDTO.Fullname">FullName</label>
+                                        <input asp-for="AddUserAccountAccessDTO.Fullname" class="form-control" disabled />
+                                        <span asp-validation-for="AddUserAccountAccessDTO.Fullname" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        @*<label>Account Access</label>
+                                        @for (var i = 0; i < Model.AccessInfoChecklistItems.Count(); i++)
+                                        {
+                                            <div class="form-check">
+                                                <input type="checkbox" asp-for="@Model.AccessInfoChecklistItems[i].HasAccess" class="form-check-input">
+                                                <label class="form-check-label">@Model.AccessInfoChecklistItems[i].AccessInfoName</label>
+                                            </div>
+                                            <input asp-for="@Model.AccessInfoChecklistItems[i].AccessInfoId" type="hidden" />
+                                        }*@
+                                    </div>
+                                    
                                     <!--end::Heading-->
                                     <!--begin::Input group-->
-                                    <div class="d-flex flex-column mb-8 fv-row fv-plugins-icon-container">
-                                        <!--begin::Label-->
-                                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                            <span class="required">Username</span>
-                                            <span class="ms-2" data-bs-toggle="tooltip" aria-label="Enter your username" data-bs-original-title="Specify a username" data-kt-initialized="1">
-                                                <i class="ki-outline ki-information fs-7"></i>
-                                            </span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <input asp-for="AddUserAccountDTO.Username" type="text" class="form-control form-control-solid" placeholder="Enter username" name="Username">
-                                        @*<input asp-for="" class="form-control" placeholder="Enter your username name="Username">*@
-                                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                    </div>
-                                    <div class="d-flex flex-column mb-8 fv-row fv-plugins-icon-container">
-                                        <!--begin::Label-->
-                                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                            <span class="required">Password</span>
-                                            <span class="ms-2" data-bs-toggle="tooltip" aria-label="Enter your password" data-bs-original-title="Specify a password" data-kt-initialized="1">
-                                                <i class="ki-outline ki-information fs-7"></i>
-                                            </span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <input asp-for="AddUserAccountDTO.Password" type="password" class="form-control form-control-solid" placeholder="Enter password" name="Password">
-                                        @*<input asp-for="" class="form-control" placeholder="Enter your company name" name="Name">*@
-                                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                    </div>
-                                    <div class="d-flex flex-column mb-8 fv-row fv-plugins-icon-container">
-                                        <!--begin::Label-->
-                                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                            <span class="required">Confirmation Password</span>
-                                            <span class="ms-2" data-bs-toggle="tooltip" aria-label="Enter your confirmation password" data-bs-original-title="Specify a confirmation password" data-kt-initialized="1">
-                                                <i class="ki-outline ki-information fs-7"></i>
-                                            </span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <input asp-for="AddUserAccountDTO.ConfirmationPassword" type="password" class="form-control form-control-solid" placeholder="Enter confirmation password" name="ConfirmationPassword">
-                                        @*<input asp-for="" class="form-control" placeholder="Enter your company name" name="Name">*@
-                                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                    </div>
-                                    <!--end::Input group-->
-                                    <!--begin::Input group-->
-                                    <div class="row g-9 mb-8">
-                                        <!--begin::Col-->
-                                        <div class="col-md-6 fv-row">
-                                            <label class="required fs-6 fw-semibold mb-2">First Name</label>
-                                            <input asp-for="AddUserAccountDTO.FirstName" type="text" class="form-control form-control-solid" placeholder="Enter first name" name="FirstName">
-                                            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                        </div>
-                                        <!--end::Col-->
-                                        <!--begin::Col-->
-                                        <div class="col-md-6 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-semibold mb-2">Last Name</label>
-                                            <input type="text" asp-for="AddUserAccountDTO.LastName" class="form-control form-control-solid" placeholder="Enter last name" name="LastName">
-                                            <!--end::Input-->
-                                            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                        </div>
-                                        <!--end::Col-->
-                                    </div>
-                                    <!--end::Input group-->
-                                    <!--begin::Input group-->
-                                    <div class="row g-9 mb-8">
-                                        <div class="col-md-6 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-semibold mb-2">Nickname</label>
-                                            <input type="text" asp-for="AddUserAccountDTO.Nickname" class="form-control form-control-solid" placeholder="Enter nickname" name="Nickname">
-                                            <!--end::Input-->
-                                            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                        </div>
-                                        <div class="col-md-6 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-semibold mb-2">Ic/Passport</label>
-                                            <input type="text" asp-for="AddUserAccountDTO.IcPassport" class="form-control form-control-solid" placeholder="Enter Ic/Passport" name="IcPassport">
-                                            <!--end::Input-->
-                                            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                        </div>
-                                        <!--end::Input group-->
-                                        <!--begin::Input group-->
-                                    </div>
-                                    <div class="row g-9 mb-8">
-                                        <div class="col-md-6 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-semibold mb-2">Birthday</label>
-                                            <input type="date" asp-for="AddUserAccountDTO.Birthday" class="form-control form-control-solid" placeholder="Enter birthday" name="Birthday">
-                                            <!--end::Input-->
-                                            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                        </div>
-                                        <!--end::Input group-->
-                                        <!--begin::Input group-->
-                                    </div>
                                     <div class="text-center">
                                         <button asp-action="Index" id="kt_modal_new_ticket_cancel" class="btn btn-light me-3">Cancel</button>
                                         <button type="submit" id="kt_modal_new_ticket_submit" class="btn btn-primary">
@@ -280,6 +196,7 @@
                                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                             </span>
                                         </button>
+                                        <input type="hidden" asp-for="AddUserAccountAccessDTO.UserAccountId" />
                                     </div>
                                     <!--end::Actions-->
                                 </form>

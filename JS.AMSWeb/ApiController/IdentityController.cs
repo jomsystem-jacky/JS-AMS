@@ -36,8 +36,8 @@ namespace JS.AMSWeb.ApiController
             try
             {
                 var acc = _db.UserAccounts
-                    //.Include(m => m.CompanyProfile)
-                    .Include(m => m.UserAccountAccesses).ThenInclude(m => m.AccessInfo)
+                    ////.Include(m => m.CompanyProfile)
+                    //.Include(m => m.UserAccountAccesses).ThenInclude(m => m.AccessInfo)
                     .FirstOrDefault(x => x.UserName == dto.Username && x.IsActive);
                 if (acc == null)
                 {
@@ -61,11 +61,11 @@ namespace JS.AMSWeb.ApiController
                 {
                     await _userManager.RemoveClaimAsync(acc, claim);
                 }
-                var staffDesignation = "JOM SYSTEM SUPER ADMIN";
+                //var staffDesignation = "JOM SYSTEM SUPER ADMIN";
 
-                string? profilePicUrl = null;
-                string? companyBranchId = null;
-                var companyBranchName = "JOM SYSTEM";
+                //string? profilePicUrl = null;
+                //string? companyBranchId = null;
+                //var companyBranchName = "JOM SYSTEM";
 
 
                 var sessionObject = new UserSessionDTO();

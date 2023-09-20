@@ -3,7 +3,7 @@ using JS.AMSWeb.Areas.UserModule.ViewModels.AccountAccess;
 
 namespace JS.AMSWeb.Areas.UserModule.ViewModels.UserAccountAccess
 {
-	public class AddUserAccountAccessViewModel
+	public class ManageUserAccountAccessViewModel
 	{
         public string UserAccountId { get; set; }
         public string UserAccount { get; set; }
