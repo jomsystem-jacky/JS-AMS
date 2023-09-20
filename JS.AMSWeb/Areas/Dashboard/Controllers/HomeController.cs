@@ -35,6 +35,9 @@ namespace JS.AMSWeb.Areas.Dashboard.Controllers
                 return Redirect("Identity/Account/Login");
             }
 
+            var currentSession = HttpContext.Session.GetObjectFromJson<UserSessionDTO>("UserSession");
+            HttpContext.Session.SetObjectAsJson("UserSession", currentSession);
+
             return View();
         }
     }

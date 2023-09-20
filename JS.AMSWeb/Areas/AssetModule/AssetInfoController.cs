@@ -11,6 +11,8 @@ using JS.AMS.Data.Entity.AssetModule;
 using Microsoft.AspNetCore.Http.HttpResults;
 using JS.AMS.Data.Entity.CompanyModule;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetLocationHistory;
+using JS.AMSWeb.DTO.Identity;
+using JS.AMSWeb.Utils;
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -30,6 +32,11 @@ namespace JS.AMSWeb.Areas.AssetModule
         {
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
 
             var assetInfo = _db.AssetInfos
                 .Include(m => m.CompanyProfile)
@@ -112,6 +119,11 @@ namespace JS.AMSWeb.Areas.AssetModule
 
         public IActionResult Edit(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var assetInfo = _db.AssetInfos
                 .FirstOrDefault(x => x.Id == id);
             if (assetInfo == null)
@@ -165,6 +177,11 @@ namespace JS.AMSWeb.Areas.AssetModule
 
         public IActionResult Delete(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var assetInfo = _db.AssetInfos
                 .FirstOrDefault(x => x.Id == id);
             if (assetInfo == null)

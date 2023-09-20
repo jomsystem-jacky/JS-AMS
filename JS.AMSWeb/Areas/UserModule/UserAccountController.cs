@@ -12,6 +12,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMS.Data.Entity.User;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Identity;
+using JS.AMSWeb.DTO.Identity;
 
 namespace JS.AMSWeb.Areas.UserModule
 {
@@ -33,6 +34,11 @@ namespace JS.AMSWeb.Areas.UserModule
         {
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
 
             var userAccount = _db.UserAccounts
                 .Where(x => x.IsActive);
@@ -126,6 +132,11 @@ namespace JS.AMSWeb.Areas.UserModule
 
         public IActionResult Edit(string id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var userAccount = _db.UserAccounts
                 .FirstOrDefault(x => x.Id == id);
             if (userAccount == null)
@@ -176,6 +187,11 @@ namespace JS.AMSWeb.Areas.UserModule
 
         public IActionResult Delete(string id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var userAccount = _db.UserAccounts
                 .FirstOrDefault(x => x.Id == id);
             if (userAccount == null)

@@ -33,6 +33,7 @@
     <None Remove="Areas\Dashboard\Views\Home\" />
     <None Remove="Areas\Account\" />
     <None Remove="ApiController\" />
+    <None Remove="DTO\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
@@ -91,6 +92,11 @@
     <Folder Include="Areas\Dashboard\Views\Home\" />
     <Folder Include="Areas\Account\" />
     <Folder Include="ApiController\" />
+    <Folder Include="wwwroot\js\Shared\" />
+    <Folder Include="DTO\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\js\Shared\" />
   </ItemGroup>
 
   <ItemGroup>

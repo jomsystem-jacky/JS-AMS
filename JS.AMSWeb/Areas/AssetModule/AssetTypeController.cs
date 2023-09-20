@@ -8,6 +8,8 @@ using Humanizer;
 using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetType;
 using JS.AMS.Data.Entity.AssetModule;
+using JS.AMSWeb.DTO.Identity;
+using JS.AMSWeb.Utils;
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -27,6 +29,11 @@ namespace JS.AMSWeb.Areas.AssetModule
         {
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
 
             var assetTypes = _db.AssetTypes
                 .Where(x => x.Active);
@@ -93,6 +100,11 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Edit(ManageAssetTypeViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             try
             {
                 var assetType = _db.AssetTypes
@@ -119,6 +131,11 @@ namespace JS.AMSWeb.Areas.AssetModule
 
         public IActionResult Delete(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var assetType = _db.AssetTypes
                 .FirstOrDefault(x => x.Id == id);
             if (assetType == null)

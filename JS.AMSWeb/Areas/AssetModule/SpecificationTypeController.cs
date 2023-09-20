@@ -8,6 +8,8 @@ using Humanizer;
 using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.SpecificationType;
 using JS.AMS.Data.Entity.AssetModule;
+using JS.AMSWeb.DTO.Identity;
+using JS.AMSWeb.Utils;
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -27,6 +29,11 @@ namespace JS.AMSWeb.Areas.AssetModule
         {
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
 
             var SpecificationType = _db.SpecificationTypes
                 .Where(x => x.Active);
@@ -76,6 +83,11 @@ namespace JS.AMSWeb.Areas.AssetModule
 
         public IActionResult Edit(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var SpecificationType = _db.SpecificationTypes
                 .FirstOrDefault(x => x.Id == id);
             if (SpecificationType == null)
@@ -123,6 +135,11 @@ namespace JS.AMSWeb.Areas.AssetModule
 
         public IActionResult Delete(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var SpecificationType = _db.SpecificationTypes
                 .FirstOrDefault(x => x.Id == id);
             if (SpecificationType == null)

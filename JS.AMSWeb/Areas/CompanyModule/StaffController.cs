@@ -10,6 +10,8 @@ using X.PagedList;
 using JS.AMS.Data;
 using Humanizer;
 using DocumentFormat.OpenXml.Wordprocessing;
+using JS.AMSWeb.DTO.Identity;
+using JS.AMSWeb.Utils;
 
 namespace JS.AMSWeb.Areas.CompanyModule
 {
@@ -29,6 +31,11 @@ namespace JS.AMSWeb.Areas.CompanyModule
         {
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
 
             var staff = _db.Staff
                 .Include(m => m.CompanyProfile)
@@ -104,6 +111,11 @@ namespace JS.AMSWeb.Areas.CompanyModule
 
         public IActionResult Edit(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var staff = _db.Staff
                 .FirstOrDefault(x => x.Id == id);
             if (staff == null)
@@ -157,6 +169,11 @@ namespace JS.AMSWeb.Areas.CompanyModule
 
         public IActionResult Delete(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var staff = _db.Staff
                 .FirstOrDefault(x => x.Id == id);
             if (staff == null)

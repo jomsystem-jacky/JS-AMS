@@ -8,6 +8,8 @@ using Humanizer;
 using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetCondition;
 using JS.AMS.Data.Entity.AssetModule;
+using JS.AMSWeb.DTO.Identity;
+using JS.AMSWeb.Utils;
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -27,6 +29,11 @@ namespace JS.AMSWeb.Areas.AssetModule
         {
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
 
             var AssetCondition = _db.AssetConditions
                 .Where(x => x.Active);
@@ -61,6 +68,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Create(AddAssetConditionViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             var AssetCondition = new AssetCondition();
             AssetCondition.Active = true;
             AssetCondition.Name = dto.Name;
@@ -76,6 +89,11 @@ namespace JS.AMSWeb.Areas.AssetModule
 
         public IActionResult Edit(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var AssetCondition = _db.AssetConditions
                 .FirstOrDefault(x => x.Id == id);
             if (AssetCondition == null)
@@ -123,6 +141,11 @@ namespace JS.AMSWeb.Areas.AssetModule
 
         public IActionResult Delete(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var AssetCondition = _db.AssetConditions
                 .FirstOrDefault(x => x.Id == id);
             if (AssetCondition == null)

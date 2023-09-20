@@ -10,7 +10,8 @@ using X.PagedList;
 using JS.AMS.Data;
 using Humanizer;
 using DocumentFormat.OpenXml.Wordprocessing;
-
+using JS.AMSWeb.DTO.Identity;
+using JS.AMSWeb.Utils;
 
 namespace JS.AMSWeb.Areas.CompanyModule
 {
@@ -30,6 +31,11 @@ namespace JS.AMSWeb.Areas.CompanyModule
         {
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
 
             var companyBranch = _db.CompanyBranches
                 .Include(m => m.CompanyProfile)
@@ -113,6 +119,11 @@ namespace JS.AMSWeb.Areas.CompanyModule
 
         public IActionResult Edit(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var companyBranch = _db.CompanyBranches
                 .FirstOrDefault(x => x.Id == id);
             if (companyBranch == null)
@@ -168,6 +179,11 @@ namespace JS.AMSWeb.Areas.CompanyModule
 
         public IActionResult Delete(Guid id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
             var CompanyBranch = _db.CompanyBranches
                 .FirstOrDefault(x => x.Id == id);
             if (CompanyBranch == null)
