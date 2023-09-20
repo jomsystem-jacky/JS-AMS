@@ -13,9 +13,12 @@ namespace JS.AMSWeb.Areas.CompanyModule.ViewModels.CompanyBranch
         public string? BranchContactPersonPhoneNumber { get; set; }
 
         public Guid CompanyProfileId { get; set; }
+
+        public string CompanyProfileName { get; set; }
         //public CompanyProfile CompanyProfile { get; set; }
 
         public Guid? LocationTagId { get; set; }
+        public string LocationTagName { get; set; }
         //public LocationTag LocationTag { get; set; }
     }
 }

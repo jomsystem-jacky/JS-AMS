@@ -1,9 +1,10 @@
 ﻿@using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetInfo;
+@using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetLocationHistory;
 @using X.PagedList.Mvc.Core
-@model AssetInfoPageViewModel
+@model AssetLocationHistoryPageViewModel
 
 @{
-    ViewData["Title"] = "Asset Info List";
+    ViewData["Title"] = "AssetLocationHistory List";
 }
 
 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
@@ -17,7 +18,7 @@
                     <!--begin::Page title-->
                     <div class="page-title d-flex flex-column justify-content-center me-3">
                         <!--begin::Title-->
-                        <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Asset Info Listing</h1>
+                        <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Asset LocationHistory Listing</h1>
                         <!--end::Title-->
                         <!--begin::Breadcrumb-->
                         <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -32,7 +33,7 @@
                             </li>
                             <!--end::Item-->
                             <!--begin::Item-->
-                            <li class="breadcrumb-item text-muted">Asset Info</li>
+                            <li class="breadcrumb-item text-muted">Asset Location History</li>
                             <!--end::Item-->
                             <!--begin::Item-->
                             <li class="breadcrumb-item">
@@ -71,7 +72,9 @@
                             <!--begin::Search-->
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
-                                <input type="text" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Asset Info">
+                                <input type="text" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Location ID">
+                                @* <select asp-items="ViewBag.AssetTypes" asp-for="AddAssetLocationHistoryDTO.AssignedByStaffId" class="form-control form-control-solid w-250px ps-13" placeholder="Search Location ID" name="LocationTagId">
+                                </select> *@
                             </div>
                             <!--end::Search-->
                         </div>
@@ -90,11 +93,11 @@
                                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="FullAddress" style="width: 20%">Full Address</th>
                                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="BranchContactPersonPhoneNumber" style="width: 10%">Branch Contact Person Phone Number</th>
                                             <th class="text-end min-w-70px sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 102.640625px;">Actions</th>-->
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Name">Name</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="CompanyProfileId">Company Profile</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="AssetTypeId">Asset Type</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="LocationTagId">Code</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="BranchContactPersonName"> Remark</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="AssetInfoId">AssetInfo Id</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="LocationTag Id">LocationTag Id</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="AssignedDate">Assigned Date</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="ReturnedDate">Returned Date</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="AssignedByStaffId"> AssignedByStaff Id</th>
                                             <th class="text-end min-w-70px sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 102.640625px;">Actions</th>
                                         </tr>
                                     </thead>
@@ -104,13 +107,11 @@
                                             @foreach (var item in Model.Listing)
                                             {
                                                 <tr role="row" class="odd">
-                                                    <td>@item.Name</td>
-                                                    <td>@item.CompanyProfileName</td>
-                                                    <td>@item.AssetTypeName</td>
-                                                    <td>@item.Code</td>
-                                                    <td>@item.Remark</td>
+                                                    <td>@item.AssetInfoId</td>
+                                                    <td></td>
+                                                    <td>@item.AssignedDate</td>
 
-                                                    <td>
+                                                   @*  <td>
                                                         <a href="#" class="btn btn-light btn-flex btn-center btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                                             Actions
                                                             <i class="ki-outline ki-down fs-5 ms-1"></i>
@@ -127,19 +128,9 @@
                                                                 <a asp-action="Delete" asp-route-id="@item.Id" class="menu-link px-3" title="Delete details">Delete</a>
                                                             </div>
                                                             <!--end::Menu item-->
-                                                            <!--begin::Menu item-->
-                                                            <div class="menu-item px-3">
-                                                                <a asp-action="Assign" asp-route-assetInfoId="@item.Id" class="menu-link px-3" title="Assigned details">Assign</a>
-                                                            </div>
-                                                            <!--end::Menu item-->
-                                                            <!--begin::Menu item-->
-                                                            <div class="menu-item px-3">
-                                                                <a asp-action="History" asp-route-assetInfoId="@item.Id" class="menu-link px-3" title="History details">History</a>
-                                                            </div>
-                                                            <!--end::Menu item-->
                                                         </div>
                                                         <!--end::Menu-->
-                                                    </td>
+                                                    </td> *@
                                                 </tr>
                                             }
                                         }
@@ -158,116 +149,6 @@
                     <!--end::Card body-->
                 </div>
                 <!--end::Card-->
-                @*Begin Create Ticket Modal*@
-                <div class="modal fade" id="kt_modal_new_ticket" tabindex="-1" style="display: none;" aria-hidden="true">
-                    <!--begin::Modal dialog-->
-                    <div class="modal-dialog modal-dialog-centered mw-750px">
-                        <!--begin::Modal content-->
-                        <div class="modal-content rounded">
-                            <!--begin::Modal header-->
-                            <div class="modal-header pb-0 border-0 justify-content-end">
-                                <!--begin::Close-->
-                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                    <i class="ki-outline ki-cross fs-1"></i>
-                                </div>
-                                <!--end::Close-->
-                            </div>
-                            <!--begin::Modal header-->
-                            <!--begin::Modal body-->
-                            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-                                <!--begin:Form-->
-                                <form id="kt_modal_new_ticket_form" class="form fv-plugins-bootstrap5 fv-plugins-framework" asp-action="Create">
-                                    <!--begin::Heading-->
-                                    <div class="mb-13 text-center">
-                                        <!--begin::Title-->
-                                        <h1 class="mb-3">Add Asset Info</h1>
-                                        <!--end::Title-->
-                                        <!--begin::Description-->
-                                        @*<div class="text-gray-400 fw-semibold fs-5">
-                                        If you need more info, please check
-                                        <a href="" class="fw-bold link-primary">Support Guidelines</a>.
-                                        </div>*@
-                                        <!--end::Description-->
-                                    </div>
-                                    <!--end::Heading-->
-                                    <!--begin::Input group-->
-                                    <!--end::Input group-->
-                                    <!--begin::Input group-->
-
-                                    <div class="row g-9 mb-8">
-                                        <!--begin::Col-->
-                                        <div class="col-md-6 fv-row">
-                                            <label class="required fs-6 fw-semibold mb-2">Name</label>
-                                            <input asp-for="AddAssetInfoDTO.Name" type="text" class="form-control form-control-solid" placeholder="Enter your Name" name="Name">
-                                        </div>
-                                        <!--end::Col-->
-                                        <!--begin::Col-->
-                                        <div class="col-md-6 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-semibold mb-2">CompanyProfile Id</label>
-                                            <select asp-items="ViewBag.CompanyProfiles" asp-for="AddAssetInfoDTO.CompanyProfileId" class="form-control form-control-solid" name="CompanyProfileId">
-                                            </select>
-                                            <!--end::Input-->
-                                            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                        </div>
-                                        <!--end::Col-->
-                                        <!--end::Col-->
-                                    </div>
-                                    <!--end::Input group-->
-                                    <!--begin::Input group-->
-                                    <div class="row g-9 mb-8">
-                                        <!--begin::Col-->
-                                        <div class="col-md-6 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-semibold mb-2">AssetType Id</label>
-                                            <select asp-items="ViewBag.AssetTypes" asp-for="AddAssetInfoDTO.AssetTypeId" class="form-control form-control-solid" name="AssetTypeId">
-                                            </select>
-                                            <!--end::Input-->
-                                            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                        </div>
-                                        <!--end::Col-->
-                                        <!--begin::Col-->
-                                        <div class="col-md-6 fv-row">
-                                            <label class="required fs-6 fw-semibold mb-2">Code</label>
-                                            <input asp-for="AddAssetInfoDTO.Code" type="text" class="form-control form-control-solid" placeholder="Enter your Code" name="Code">
-                                        </div>
-                                        <!--end::Col-->
-                                        <!--begin::Col-->
-                                        <!--begin::Input group-->
-                                        <div class="col-md-6 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-semibold mb-2">Remark</label>
-                                            <input type="text" asp-for="AddAssetInfoDTO.Remark" class="form-control form-control-solid" placeholder="Enter Remark" name="Remark">
-                                            <!--end::Input-->
-
-                                            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                        </div>
-                                        
-                                        <!--end::Col-->
-                                        <!--end::Input group-->
-
-                                    </div>
-                                    <div class="text-center">
-                                        <button asp-action="Index" id="kt_modal_new_ticket_cancel" class="btn btn-light me-3">Cancel</button>
-                                        <button type="submit" id="kt_modal_new_ticket_submit" class="btn btn-primary">
-                                            <span class="indicator-label">Submit</span>
-                                            <span class="indicator-progress">
-                                                Please wait...
-                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <!--end::Actions-->
-                                </form>
-                                <!--end:Form-->
-                            </div>
-                            <!--end::Modal body-->
-                        </div>
-                        <!--end::Modal content-->
-                    </div>
-                    <!--end::Modal dialog-->
-                
-
-                @*End Create Ticket Modal*@
-                </div>
-                <!--end::Modals-->
             </div>
             <!--end::Content container-->
         </div>

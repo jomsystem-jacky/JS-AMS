@@ -32,6 +32,8 @@ namespace JS.AMSWeb.Areas.CompanyModule
             //pagination.CurrentPage = dto.Page;
 
             var companyBranch = _db.CompanyBranches
+                .Include(m => m.CompanyProfile)
+                .Include(m => m.LocationTag)
                 .Where(x => x.Active);
 
             var listVm = new List<CompanyBranchViewModel>();
@@ -46,7 +48,9 @@ namespace JS.AMSWeb.Areas.CompanyModule
                 vm.BranchContactPersonName = a.BranchContactPersonName;
                 vm.BranchContactPersonPhoneNumber = a.BranchContactPersonPhoneNumber;
                 vm.CompanyProfileId = a.CompanyProfileId;
+                vm.CompanyProfileName = a.CompanyProfile.Name;
                 vm.LocationTagId = a.LocationTagId;
+                vm.LocationTagName = a.LocationTag.Name;
                 
                 listVm.Add(vm);
             }
@@ -73,14 +77,19 @@ namespace JS.AMSWeb.Areas.CompanyModule
             {
                 var companyProfile = _db.CompanyProfiles
                     .FirstOrDefault(x => x.Id == dto.CompanyProfileId);
-
-                var locationTag = _db.LocationTags
-                    .FirstOrDefault(x => x.Id == dto.LocationTagId);
-
                 if (companyProfile == null)
                 {
                     return BadRequest("Company Profile not found");
                 }
+
+                var locationTag = new LocationTag();
+                locationTag.Active = true;
+                locationTag.Name = dto.Name;
+                locationTag.Code = dto.Name;
+                locationTag.CompanyProfile = companyProfile;
+
+                _db.LocationTags.Add(locationTag);
+                _db.SaveChanges("system");
 
                 var companyBranch = new CompanyBranch();
                 companyBranch.Active = true;
@@ -90,7 +99,6 @@ namespace JS.AMSWeb.Areas.CompanyModule
                 companyBranch.FullAddress = dto.FullAddress;
                 companyBranch.CompanyProfile = companyProfile;
                 companyBranch.LocationTag = locationTag;
-                
 
                 _db.CompanyBranches.Add(companyBranch);
                 _db.SaveChanges("system");
@@ -101,7 +109,6 @@ namespace JS.AMSWeb.Areas.CompanyModule
             {
                 return Ok(ex);
             }
-           
         }
 
         public IActionResult Edit(Guid id)

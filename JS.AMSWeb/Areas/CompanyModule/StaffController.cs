@@ -31,6 +31,8 @@ namespace JS.AMSWeb.Areas.CompanyModule
             //pagination.CurrentPage = dto.Page;
 
             var staff = _db.Staff
+                .Include(m => m.CompanyProfile)
+                .Include(m => m.LocationTag)
                 .Where(x => x.Active);
 
             var listVm = new List<StaffViewModel>();
@@ -44,7 +46,9 @@ namespace JS.AMSWeb.Areas.CompanyModule
                 vm.EmployeeId = a.EmployeeId;
                 vm.PhoneNumber = a.PhoneNumber;
                 vm.CompanyProfileId = a.CompanyProfileId;
+                vm.CompanyProfileName = a.CompanyProfile.Name;
                 vm.LocationTagId = a.LocationTagId;
+                vm.LocationTagName = a.LocationTag.Name;
                 listVm.Add(vm);
             }
 
@@ -67,10 +71,20 @@ namespace JS.AMSWeb.Areas.CompanyModule
         public async Task<IActionResult> Create(AddStaffViewModel dto)
         {
             var companyProfile = _db.CompanyProfiles
-                    .FirstOrDefault(x => x.Id == dto.CompanyProfileId);
+                .FirstOrDefault(x => x.Id == dto.CompanyProfileId);
+            if(companyProfile == null)
+            {
+                return BadRequest("Company profile not found");
+            }
 
-            var locationTag = _db.LocationTags
-                .FirstOrDefault(x => x.Id == dto.LocationTagId);
+            var locationTag = new LocationTag                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ();
+            locationTag.Active = true;
+            locationTag.Name = dto.Name;
+            locationTag.Code = dto.EmployeeId;
+            locationTag.CompanyProfile = companyProfile;
+
+            _db.LocationTags.Add(locationTag);
+            _db.SaveChanges("system");
 
             var staff = new Staff();
             staff.Active = true;
@@ -80,10 +94,9 @@ namespace JS.AMSWeb.Areas.CompanyModule
             staff.CompanyProfile = companyProfile;
             staff.LocationTag = locationTag;
 
-
             _db.Staff.Add(staff);
             _db.SaveChanges("system");
-
+            
             return RedirectToAction("Index");
         }
 

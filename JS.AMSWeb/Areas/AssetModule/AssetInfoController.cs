@@ -9,6 +9,8 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetInfo;
 using JS.AMS.Data.Entity.AssetModule;
 using Microsoft.AspNetCore.Http.HttpResults;
+using JS.AMS.Data.Entity.CompanyModule;
+using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetLocationHistory;
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -30,6 +32,8 @@ namespace JS.AMSWeb.Areas.AssetModule
             //pagination.CurrentPage = dto.Page;
 
             var assetInfo = _db.AssetInfos
+                .Include(m => m.CompanyProfile)
+                .Include(m => m.AssetType)
                 .Where(x => x.Active);
 
             var listVm = new List<AssetInfoViewModel>();
@@ -43,7 +47,9 @@ namespace JS.AMSWeb.Areas.AssetModule
                 vm.Code = a.Code;
                 vm.Remark = a.Remark;
                 vm.CompanyProfileId = a.CompanyProfileId;
+                vm.CompanyProfileName = a.CompanyProfile.Name;
                 vm.AssetTypeId = a.AssetTypeId;
+                vm.AssetTypeName = a.AssetType.Name;
 
                 listVm.Add(vm);
             }
@@ -70,8 +76,15 @@ namespace JS.AMSWeb.Areas.AssetModule
                 var companyProfile = _db.CompanyProfiles
                         .FirstOrDefault(x => x.Id == dto.CompanyProfileId);
 
-                var assetType = _db.AssetTypes
-                    .FirstOrDefault(x => x.Id == dto.AssetTypeId);
+                //var assetTypes = _db.AssetTypes
+                //    .FirstOrDefault(x => x.Id == dto.AssetTypeId);
+                var assetTypes = new AssetType();
+                assetTypes.Name = dto.Name;
+                assetTypes.Code = dto.Code;
+                assetTypes.Remark = dto.Remark;
+
+                _db.AssetTypes.Add(assetTypes);
+                _db.SaveChanges("system");
 
                 if (companyProfile == null)
                 {
@@ -83,7 +96,7 @@ namespace JS.AMSWeb.Areas.AssetModule
                 assetInfo.Code = dto.Code;
                 assetInfo.Remark = dto.Remark;
                 assetInfo.CompanyProfile = companyProfile;
-                assetInfo.AssetType = assetType;
+                assetInfo.AssetType = assetTypes;
 
 
                 _db.AssetInfos.Add(assetInfo);
@@ -197,6 +210,85 @@ namespace JS.AMSWeb.Areas.AssetModule
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        public IActionResult Assign(Guid assetInfoId)
+        {
+            var assetInfo = _db.AssetInfos
+                .FirstOrDefault(x => x.Id == assetInfoId);
+            if (assetInfo == null)
+            {
+                return BadRequest("Asset Info not found");
+            }
+            var vm = new AssignAssetInfoViewModel();
+            vm.assetInfoId = assetInfo.Id;
+            vm.AssetInfoName = assetInfo.Name;
+            vm.AssignDate = DateTime.Now;
+
+            ViewBag.LocationTags = new SelectList(_db.LocationTags.Where(x => x.Active), "Id", "Name");
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult Assign(AssignAssetInfoViewModel dto)
+        {
+            var assetInfo = _db.AssetInfos
+                .FirstOrDefault(x => x.Id == dto.assetInfoId);
+
+            if (assetInfo == null)
+            {
+                return BadRequest("Asset Info not found");
+            }
+
+            var assignmentHistory = new AssetLocationHistory();
+            assignmentHistory.Active = true;
+            assignmentHistory.AssetInfoId = dto.assetInfoId;
+            assignmentHistory.LocationTagId = dto.LocationTagId;
+            assignmentHistory.AssignedDate = dto.AssignDate;
+
+            _db.AssetLocationHistories.Add(assignmentHistory);
+            _db.SaveChanges("system");
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult History(int? page, Guid assetInfoId)
+        {
+            var assetInfo = _db.AssetLocationHistories
+                .Include(m => m.AssetInfo)
+                .Include(m => m.LocationTag)
+                .Where(x => x.Active);
+
+            var locationHistories = _db.AssetLocationHistories
+                .Include(alh => alh.AssetInfo)
+                .Include(alh => alh.LocationTag)
+                .Include(alh => alh.AssignedByStaff)
+                .OrderByDescending(alh => alh.AssignedDate)
+                .Where(alh => alh.Active && alh.AssetInfoId == assetInfoId)
+                .ToList();
+
+            var listVm = new List<AssetLocationHistoryViewModel>();
+
+            var locationHistoryList = locationHistories.ToList();
+            foreach (var a in locationHistoryList)
+            {
+                var vm = new AssetLocationHistoryViewModel();
+                vm.AssignedDate = a.AssignedDate;
+                vm.AssetInfoName = a.AssetInfo.Name;
+
+                listVm.Add(vm);
+            }
+
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
+
+            var listing = listVm.ToPagedList(pageNumber, pageSize);
+
+            var result = new AssetLocationHistoryPageViewModel();
+            result.Listing = listing;
+
+            return View(result);
         }
     }
 }

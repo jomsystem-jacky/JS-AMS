@@ -92,4 +92,11 @@
     <Folder Include="Areas\Account\" />
     <Folder Include="ApiController\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\AssetModule\Views\AssetInfo\Assign.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

@@ -93,9 +93,9 @@
                                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="BranchContactPersonPhoneNumber" style="width: 10%">Branch Contact Person Phone Number</th>
                                             <th class="text-end min-w-70px sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 102.640625px;">Actions</th>-->
                                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Name">Name</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="CompanyProfileId">CompanyProfile Id</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="CompanyProfileId">Company Profile</th>
                                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="FullAddress">Full Address</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="LocationTagId">LocationTag Id</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="LocationTagId">Location Tag</th>
                                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="BranchContactPersonName">Branch Contact Person Name</th>
                                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="BranchContactPersonPhoneNumber">Branch Contact Person Phone Number</th>
                                             <th class="text-end min-w-70px sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 102.640625px;">Actions</th>
@@ -108,9 +108,9 @@
                                             {
                                                 <tr role="row" class="odd">
                                                     <td>@item.Name</td>
-                                                    <td>@item.CompanyProfileId</td>
+                                                    <td>@item.CompanyProfileName</td>
                                                     <td>@item.FullAddress</td>
-                                                    <td>@item.LocationTagId</td>
+                                                    <td>@item.LocationTagName</td>
                                                     <td>@item.BranchContactPersonName</td>
                                                     <td>@item.BranchContactPersonPhoneNumber</td>
 
@@ -208,8 +208,6 @@
                                         <!--end::Col-->
                                         <!--end::Col-->
                                     </div>
-                                    <!--end::Input group-->
-                                    <!--begin::Input group-->
                                     <div class="row g-9 mb-8">
                                         <!--begin::Col-->
                                         <div class="col-md-6 fv-row">
@@ -217,14 +215,6 @@
                                             <input asp-for="AddCompanyBranchDTO.FullAddress" type="text" class="form-control form-control-solid" placeholder="Enter your Full Address" name="FullAddress">
                                         </div>
                                         <!--end::Col-->
-                                        <div class="col-md-6 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-semibold mb-2">LocationTag Id</label>
-                                            <select asp-items="ViewBag.LocationTags" asp-for="AddCompanyBranchDTO.LocationTagId" class="form-control form-control-solid" name="LocationTagId">
-                                            </select>
-                                            <!--end::Input-->
-                                            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                        </div>
-                                        <!--begin::Col-->
                                         <!--begin::Input group-->
                                         <div class="col-md-6 fv-row fv-plugins-icon-container">
                                             <label class="required fs-6 fw-semibold mb-2">Branch Contact Person Name</label>

@@ -13,10 +13,14 @@ namespace JS.AMSWeb.Areas.AssetModule.ViewModels.AssetInfo
 
         public Guid AssetTypeId { get; set; }
 
+        public string AssetTypeName { get; set; }
+
         public Guid CompanyProfileId { get; set; }
 
+        public string CompanyProfileName { get; set; }
+
         public List<AssetInspectionInfoHistory> AssetInspectionInfoHistories { get; set; } = new List<AssetInspectionInfoHistory>();
-        public List<AssetLocationHistory> AssetLocationHistories { get; set; } = new List<AssetLocationHistory>();
+        //public List<AssetLocationHistory> AssetLocationHistories { get; set; } = new List<AssetLocationHistory>();
     }
 }
 
