@@ -238,7 +238,7 @@ namespace JS.AMSWeb.Areas.AssetModule
                 return BadRequest("Asset Info not found");
             }
             var vm = new AssignAssetInfoViewModel();
-            vm.assetInfoId = assetInfo.Id;
+            vm.AssetInfoId = assetInfo.Id;
             vm.AssetInfoName = assetInfo.Name;
             vm.AssignDate = DateTime.Now;
 
@@ -251,8 +251,7 @@ namespace JS.AMSWeb.Areas.AssetModule
         public IActionResult Assign(AssignAssetInfoViewModel dto)
         {
             var assetInfo = _db.AssetInfos
-                .FirstOrDefault(x => x.Id == dto.assetInfoId);
-
+                .FirstOrDefault(x => x.Id == dto.AssetInfoId);
             if (assetInfo == null)
             {
                 return BadRequest("Asset Info not found");
@@ -260,9 +259,10 @@ namespace JS.AMSWeb.Areas.AssetModule
 
             var assignmentHistory = new AssetLocationHistory();
             assignmentHistory.Active = true;
-            assignmentHistory.AssetInfoId = dto.assetInfoId;
+            assignmentHistory.AssetInfo = assetInfo;
             assignmentHistory.LocationTagId = dto.LocationTagId;
             assignmentHistory.AssignedDate = dto.AssignDate;
+            assignmentHistory.AssignedByStaffId = dto.AssignByStaffId;
 
             _db.AssetLocationHistories.Add(assignmentHistory);
             _db.SaveChanges("system");
