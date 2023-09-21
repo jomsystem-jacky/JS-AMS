@@ -87,13 +87,11 @@
     <Folder Include="Areas\Dashboard\ViewModels\" />
     <Folder Include="Areas\Dashboard\Views\" />
     <Folder Include="Areas\Dashboard\Controllers\" />
-    <Folder Include="DTO\" />
     <Folder Include="DTO\Identity\" />
     <Folder Include="Areas\Dashboard\Views\Home\" />
     <Folder Include="Areas\Account\" />
     <Folder Include="ApiController\" />
     <Folder Include="wwwroot\js\Shared\" />
-    <Folder Include="DTO\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\js\Shared\" />

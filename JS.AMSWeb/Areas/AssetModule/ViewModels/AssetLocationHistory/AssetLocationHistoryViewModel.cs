@@ -17,6 +17,8 @@ namespace JS.AMSWeb.Areas.AssetModule.ViewModels.AssetLocationHistory
 
         public Guid AssignedByStaffId { get; set; }
 
+        public string AssignedByStaffName { get;  set; }
+
     }
 }
 

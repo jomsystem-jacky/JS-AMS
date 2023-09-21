@@ -105,6 +105,15 @@
                                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                             </div>
                             <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-md-6 fv-row fv-plugins-icon-container">
+                                <label class="required fs-6 fw-semibold mb-2">Staff</label>
+                                <select asp-items="ViewBag.Staff" asp-for="AssignByStaffId" class="form-control form-control-solid" name="AssignByStaffId">
+                                </select>
+                                <!--end::Input-->
+                                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
+                            </div>
+                            <!--end::Col-->
 
                         </div>
                         <!--end::Input group-->

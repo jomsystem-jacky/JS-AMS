@@ -243,6 +243,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             vm.AssignDate = DateTime.Now;
 
             ViewBag.LocationTags = new SelectList(_db.LocationTags.Where(x => x.Active), "Id", "Name");
+            ViewBag.Staff = new SelectList(_db.Staff.Where(x => x.Active), "Id", "Name");
 
             return View(vm);
         }
@@ -252,6 +253,11 @@ namespace JS.AMSWeb.Areas.AssetModule
         {
             var assetInfo = _db.AssetInfos
                 .FirstOrDefault(x => x.Id == dto.AssetInfoId);
+            var LocationTag = _db.LocationTags
+                .FirstOrDefault(x => x.Id == dto.LocationTagId);
+            var staff = _db.Staff
+                .FirstOrDefault(x => x.Id == dto.AssignByStaffId);
+
             if (assetInfo == null)
             {
                 return BadRequest("Asset Info not found");
@@ -260,9 +266,9 @@ namespace JS.AMSWeb.Areas.AssetModule
             var assignmentHistory = new AssetLocationHistory();
             assignmentHistory.Active = true;
             assignmentHistory.AssetInfo = assetInfo;
-            assignmentHistory.LocationTagId = dto.LocationTagId;
+            assignmentHistory.LocationTag = LocationTag;
             assignmentHistory.AssignedDate = dto.AssignDate;
-            assignmentHistory.AssignedByStaffId = dto.AssignByStaffId;
+            assignmentHistory.AssignedByStaff = staff;
 
             _db.AssetLocationHistories.Add(assignmentHistory);
             _db.SaveChanges("system");
@@ -275,6 +281,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             var assetInfo = _db.AssetLocationHistories
                 .Include(m => m.AssetInfo)
                 .Include(m => m.LocationTag)
+                .Include(m => m.AssignedByStaff)
                 .Where(x => x.Active);
 
             var locationHistories = _db.AssetLocationHistories
@@ -293,6 +300,8 @@ namespace JS.AMSWeb.Areas.AssetModule
                 var vm = new AssetLocationHistoryViewModel();
                 vm.AssignedDate = a.AssignedDate;
                 vm.AssetInfoName = a.AssetInfo.Name;
+                vm.LocationTagName = a.LocationTag.Name;
+                //vm.AssignedByStaffName = a.AssignedByStaff.Name;
 
                 listVm.Add(vm);
             }
