@@ -12,6 +12,7 @@ using Humanizer;
 using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
+using JS.BPOSWeb.DTO.Shared;
 
 namespace JS.AMSWeb.Areas.CompanyModule
 {
@@ -27,10 +28,10 @@ namespace JS.AMSWeb.Areas.CompanyModule
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Index(int? page)
+        public IActionResult Index(int? page,string searchName)
         {
-            //var pagination = new PaginationDTO();
-            //pagination.CurrentPage = dto.Page;
+            var pagination = new PaginationDTO();
+            pagination.CurrentPage = page ?? 1;
             var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
             if (sessionData == null)
             {
@@ -40,7 +41,13 @@ namespace JS.AMSWeb.Areas.CompanyModule
             var staff = _db.Staff
                 .Include(m => m.CompanyProfile)
                 .Include(m => m.LocationTag)
-                .Where(x => x.Active);
+                .Where(x => x.Active)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchName))
+            {
+                staff = staff.Where(x => x.Name.ToLower().Replace(" ","").Contains(searchName.ToLower().Replace(" ","")));
+            }
 
             var listVm = new List<StaffViewModel>();
 
@@ -58,9 +65,12 @@ namespace JS.AMSWeb.Areas.CompanyModule
                 vm.LocationTagName = a.LocationTag.Name;
                 listVm.Add(vm);
             }
+            listVm = listVm.OrderBy(x => x.Name).ToList();
 
             int pageSize = 10;
             int pageNumber = page ?? 1;
+
+            ViewData["SearchName"] = searchName;
 
             var listing = listVm.ToPagedList(pageNumber, pageSize);
 
@@ -72,6 +82,17 @@ namespace JS.AMSWeb.Areas.CompanyModule
             ViewBag.LocationTags = new SelectList(_db.LocationTags.Where(x => x.Active), "Id", "Name");
 
             return View(result);
+        }
+
+        [HttpPost]
+        public IActionResult Search(string? searchName,  int? page)
+        {
+            if (page == 0 || page == null)
+            {
+                page = 1;
+            }
+
+            return RedirectToAction("Index", new { page = page, searchName = searchName});
         }
 
         [HttpPost]
@@ -106,8 +127,6 @@ namespace JS.AMSWeb.Areas.CompanyModule
             
             return RedirectToAction("Index");
         }
-
-
 
         public IActionResult Edit(Guid id)
         {
@@ -155,7 +174,6 @@ namespace JS.AMSWeb.Areas.CompanyModule
                 staff.CompanyProfileId = dto.CompanyProfileId;
                 staff.LocationTagId = dto.LocationTagId;
 
-
                 _db.Staff.Update(staff);
                 await _db.SaveChangesAsync("system");
 
@@ -176,6 +194,7 @@ namespace JS.AMSWeb.Areas.CompanyModule
             }
             var staff = _db.Staff
                 .FirstOrDefault(x => x.Id == id);
+            
             if (staff == null)
             {
                 return BadRequest("Company profile not found");

@@ -13,6 +13,7 @@ using JS.AMS.Data.Entity.CompanyModule;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetLocationHistory;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
+using JS.BPOSWeb.DTO.Shared;
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -27,11 +28,11 @@ namespace JS.AMSWeb.Areas.AssetModule
             _db = db;
             _webHostEnvironment = webHostEnvironment;
         }
-
-        public IActionResult Index(int? page)
+        public IActionResult Index(int? page,string searchName)
         {
-            //var pagination = new PaginationDTO();
-            //pagination.CurrentPage = dto.Page;
+            var pagination = new PaginationDTO();
+            pagination.CurrentPage = page ?? 1;
+
             var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
             if (sessionData == null)
             {
@@ -42,6 +43,11 @@ namespace JS.AMSWeb.Areas.AssetModule
                 .Include(m => m.CompanyProfile)
                 .Include(m => m.AssetType)
                 .Where(x => x.Active);
+
+            if (!string.IsNullOrWhiteSpace(searchName))
+            {
+                assetInfo = assetInfo.Where(x => x.Name.ToLower().Replace(" ", "").Contains(searchName.ToLower().Replace(" ", "")));
+            }
 
             var listVm = new List<AssetInfoViewModel>();
 
@@ -64,6 +70,8 @@ namespace JS.AMSWeb.Areas.AssetModule
             int pageSize = 10;
             int pageNumber = page ?? 1;
 
+            ViewData["SearchName"] = searchName;
+
             var listing = listVm.ToPagedList(pageNumber, pageSize);
 
             var result = new AssetInfoPageViewModel();
@@ -75,6 +83,16 @@ namespace JS.AMSWeb.Areas.AssetModule
             return View(result);
         }
 
+        [HttpPost]
+        public IActionResult Search(string? searchName, int? page)
+        {
+            if (page == 0 || page == null)
+            {
+                page = 1;
+            }
+
+            return RedirectToAction("Index", new { page = page, searchName = searchName });
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(AddAssetInfoViewModel dto)
@@ -104,7 +122,6 @@ namespace JS.AMSWeb.Areas.AssetModule
                 assetInfo.Remark = dto.Remark;
                 assetInfo.CompanyProfile = companyProfile;
                 assetInfo.AssetType = assetTypes;
-
 
                 _db.AssetInfos.Add(assetInfo);
                 _db.SaveChanges("system");
@@ -141,7 +158,6 @@ namespace JS.AMSWeb.Areas.AssetModule
 
             ViewBag.CompanyProfiles = new SelectList(_db.CompanyProfiles.Where(x => x.Active), "Id", "Name");
             ViewBag.AssetTypes = new SelectList(_db.AssetTypes.Where(x => x.Active), "Id", "Name");
-
 
             return View(vm);
         }
@@ -237,6 +253,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             {
                 return BadRequest("Asset Info not found");
             }
+
             var vm = new AssignAssetInfoViewModel();
             vm.AssetInfoId = assetInfo.Id;
             vm.AssetInfoName = assetInfo.Name;

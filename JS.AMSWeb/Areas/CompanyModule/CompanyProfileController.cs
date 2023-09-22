@@ -12,6 +12,7 @@ using Humanizer;
 using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
+using JS.BPOSWeb.DTO.Shared;
 
 namespace JS.AMSWeb.Areas.CompanyModule
 {
@@ -27,10 +28,10 @@ namespace JS.AMSWeb.Areas.CompanyModule
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Index(int? page)
+        public IActionResult Index(int? page, string searchName)
         {
-            //var pagination = new PaginationDTO();
-            //pagination.CurrentPage = dto.Page;
+            var pagination = new PaginationDTO();
+            pagination.CurrentPage = page ?? 1;
             var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
             if (sessionData == null)
             {
@@ -39,6 +40,11 @@ namespace JS.AMSWeb.Areas.CompanyModule
 
             var companyProfiles = _db.CompanyProfiles
                 .Where(x => x.Active);
+
+            if (!string.IsNullOrWhiteSpace(searchName))
+            {
+                companyProfiles = companyProfiles.Where(x => x.Name.ToLower().Replace(" ", "").Contains(searchName.ToLower().Replace(" ", "")));
+            }
 
             var listVm = new List<CompanyProfileViewModel>();
 
@@ -58,6 +64,8 @@ namespace JS.AMSWeb.Areas.CompanyModule
             int pageSize = 10;
             int pageNumber = page ?? 1;
 
+            ViewData["SearchName"] = searchName;
+
             var listing = listVm.ToPagedList(pageNumber, pageSize);
 
             var result = new CompanyProfilePageViewModel();
@@ -65,6 +73,17 @@ namespace JS.AMSWeb.Areas.CompanyModule
             result.AddCompanyProfileDTO = new AddCompanyProfileViewModel();
 
             return View(result);
+        }
+
+        [HttpPost]
+        public IActionResult Search(string? searchName, int? page)
+        {
+            if (page == 0 || page == null)
+            {
+                page = 1;
+            }
+
+            return RedirectToAction("Index", new { page = page, searchName = searchName });
         }
 
         [HttpPost]
@@ -83,8 +102,6 @@ namespace JS.AMSWeb.Areas.CompanyModule
 
             return RedirectToAction("Index");
         }
-
-
 
         public IActionResult Edit(Guid id)
         {

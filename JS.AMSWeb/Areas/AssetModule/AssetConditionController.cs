@@ -10,6 +10,8 @@ using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetCondition;
 using JS.AMS.Data.Entity.AssetModule;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
+using JS.BPOSWeb.DTO.Shared;
+using JS.AMS.Data.Entity.CompanyModule;
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -24,11 +26,10 @@ namespace JS.AMSWeb.Areas.AssetModule
             _db = db;
             _webHostEnvironment = webHostEnvironment;
         }
-
-        public IActionResult Index(int? page)
+        public IActionResult Index(int? page, string searchName)
         {
-            //var pagination = new PaginationDTO();
-            //pagination.CurrentPage = dto.Page;
+            var pagination = new PaginationDTO();
+            pagination.CurrentPage = page ?? 1;
             var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
             if (sessionData == null)
             {
@@ -37,6 +38,11 @@ namespace JS.AMSWeb.Areas.AssetModule
 
             var AssetCondition = _db.AssetConditions
                 .Where(x => x.Active);
+
+            if (!string.IsNullOrWhiteSpace(searchName))
+            {
+                AssetCondition = AssetCondition.Where(x => x.Name.ToLower().Replace(" ", "").Contains(searchName.ToLower().Replace(" ", "")));
+            }
 
             var listVm = new List<AssetConditionViewModel>();
 
@@ -48,13 +54,14 @@ namespace JS.AMSWeb.Areas.AssetModule
                 vm.Name = a.Name;
                 vm.Code = a.Code;
                 vm.Remark = a.Remark;
-                
 
                 listVm.Add(vm);
             }
 
             int pageSize = 10;
             int pageNumber = page ?? 1;
+
+            ViewData["SearchName"] = searchName;
 
             var listing = listVm.ToPagedList(pageNumber, pageSize);
 
@@ -63,6 +70,17 @@ namespace JS.AMSWeb.Areas.AssetModule
             result.AddAssetConditionTypeDTO = new AssetConditionViewModel();
 
             return View(result);
+        }
+
+        [HttpPost]
+        public IActionResult Search(string? searchName, int? page)
+        {
+            if (page == 0 || page == null)
+            {
+                page = 1;
+            }
+
+            return RedirectToAction("Index", new { page = page, searchName = searchName });
         }
 
         [HttpPost]
@@ -79,7 +97,6 @@ namespace JS.AMSWeb.Areas.AssetModule
             AssetCondition.Name = dto.Name;
             AssetCondition.Code = dto.Code;
             AssetCondition.Remark = dto.Remark;
-            
 
             _db.AssetConditions.Add(AssetCondition);
             _db.SaveChanges("system");
@@ -126,7 +143,6 @@ namespace JS.AMSWeb.Areas.AssetModule
                 AssetCondition.Name = dto.Name;
                 AssetCondition.Code = dto.Code;
                 AssetCondition.Remark = dto.Remark;
-               
 
                 _db.AssetConditions.Update(AssetCondition);
                 await _db.SaveChangesAsync("system");
@@ -158,7 +174,6 @@ namespace JS.AMSWeb.Areas.AssetModule
             vm.Name = AssetCondition.Name;
             vm.Code = AssetCondition.Code;
             vm.Remark = AssetCondition.Remark;
-            
 
             return View(vm);
         }

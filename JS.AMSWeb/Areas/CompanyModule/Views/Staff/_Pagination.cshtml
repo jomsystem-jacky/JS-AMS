@@ -1,6 +1,7 @@
 ﻿@using JS.AMSWeb.Areas.CompanyModule.ViewModels.CompanyProfile;
+@using JS.AMSWeb.Areas.CompanyModule.ViewModels.Staff;
 @using X.PagedList.Mvc.Core
-@model X.PagedList.IPagedList<CompanyProfileViewModel>
+@model X.PagedList.IPagedList<StaffViewModel>
 
 @{
     <style>
@@ -62,7 +63,7 @@
 
                         <li>
                             <a class="btn btn-icon btn-sm btn-light mr-2 my-1" asp-route-page="1" asp-route-searchName="@ViewData["SearchName"]">
-                                <i class="ki ki-double-arrow-back icon-xs"></i>
+                                <i class="ki ki-bold-arrow-back icon-xs"></i>
                             </a>
                         </li>
 

@@ -10,6 +10,7 @@ using JS.AMSWeb.Areas.AssetModule.ViewModels.SpecificationType;
 using JS.AMS.Data.Entity.AssetModule;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
+using JS.AMS.Data.Entity.CompanyModule;
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -25,7 +26,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Index(int? page)
+        public IActionResult Index(int? page, string searchName)
         {
             //var pagination = new PaginationDTO();
             //pagination.CurrentPage = dto.Page;
@@ -38,6 +39,10 @@ namespace JS.AMSWeb.Areas.AssetModule
             var SpecificationType = _db.SpecificationTypes
                 .Where(x => x.Active);
 
+            if (!string.IsNullOrWhiteSpace(searchName))
+            {
+                SpecificationType = SpecificationType.Where(x => x.Name.ToLower().Replace(" ", "").Contains(searchName.ToLower().Replace(" ", "")));
+            }
             var listVm = new List<SpecificationTypeViewModel>();
 
             var SpecificationTypeList = SpecificationType.ToList();
@@ -56,6 +61,8 @@ namespace JS.AMSWeb.Areas.AssetModule
             int pageSize = 10;
             int pageNumber = page ?? 1;
 
+            ViewData["SearchName"] = searchName;
+
             var listing = listVm.ToPagedList(pageNumber, pageSize);
 
             var result = new SpecificationTypePageViewModel();
@@ -63,6 +70,17 @@ namespace JS.AMSWeb.Areas.AssetModule
             result.AddSpecificationTypeDTO = new SpecificationTypeViewModel();
 
             return View(result);
+        }
+
+        [HttpPost]
+        public IActionResult Search(string? searchName, int? page)
+        {
+            if (page == 0 || page == null)
+            {
+                page = 1;
+            }
+
+            return RedirectToAction("Index", new { page = page, searchName = searchName });
         }
 
         [HttpPost]
