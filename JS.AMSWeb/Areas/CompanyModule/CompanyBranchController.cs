@@ -12,7 +12,7 @@ using Humanizer;
 using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
-using JS.BPOSWeb.DTO.Shared;
+using JS.AMSWeb.DTO.Shared;
 
 namespace JS.AMSWeb.Areas.CompanyModule
 {

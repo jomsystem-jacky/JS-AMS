@@ -13,7 +13,7 @@ using JS.AMS.Data.Entity.CompanyModule;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetLocationHistory;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
-using JS.BPOSWeb.DTO.Shared;
+using JS.AMSWeb.DTO.Shared;
 
 namespace JS.AMSWeb.Areas.AssetModule
 {

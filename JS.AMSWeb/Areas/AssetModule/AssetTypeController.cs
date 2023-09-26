@@ -10,7 +10,7 @@ using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetType;
 using JS.AMS.Data.Entity.AssetModule;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
-using JS.BPOSWeb.DTO.Shared;
+using JS.AMSWeb.DTO.Shared;
 using JS.AMS.Data.Entity.CompanyModule;
 
 namespace JS.AMSWeb.Areas.AssetModule
