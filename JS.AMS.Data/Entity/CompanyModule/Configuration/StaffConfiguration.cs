@@ -29,6 +29,11 @@ namespace JS.AMS.Data.Entity.CompanyModule.Configuration
                 .WithMany(x => x.LocationTagStaffs)
                 .HasForeignKey(x => x.LocationTagId)
                 .IsRequired(false);
+
+            builder.HasOne(x => x.UserAccount)
+                .WithMany()
+                .HasForeignKey(x => x.UserAccountId)
+                .IsRequired(false);
         }
     }
 }

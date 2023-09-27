@@ -20,10 +20,12 @@
     <None Remove="Entity\CompanyModule\" />
     <None Remove="Entity\AssetModule\" />
     <None Remove="Entity\InspectionModule\" />
+    <None Remove="Entity\TicketModule\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entity\CompanyModule\" />
     <Folder Include="Entity\AssetModule\" />
     <Folder Include="Entity\InspectionModule\" />
+    <Folder Include="Entity\TicketModule\" />
   </ItemGroup>
 </Project>

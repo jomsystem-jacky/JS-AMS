@@ -5,6 +5,7 @@ using JS.AMS.Data.Entity.InspectionModule;
 using JS.AMS.Data.Entity.AssetModule;
 using Microsoft.EntityFrameworkCore;
 using System;
+using JS.AMS.Data.Entity.TicketModule;
 
 namespace JS.AMS.Data
 {
@@ -36,7 +37,13 @@ namespace JS.AMS.Data
         public DbSet<UserAccount> UserAccounts { get; set; }
         public DbSet<UserAccountAccess> UserAccountAccesses { get; set; }
         public DbSet<AccessInfo> AccessInfos { get; set; }
-        
+
+        //Ticket Module
+        public DbSet<TicketInfo> TicketInfos { get; set; }
+        public DbSet<TicketStatus> TicketStatuses { get; set; }
+        public DbSet<TicketCategory> TicketCategories { get; set; }
+        public DbSet<TicketHistory> TicketHistories { get; set; }
+        public DbSet<TicketHistoryMedia> TicketHistoryMedias { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
