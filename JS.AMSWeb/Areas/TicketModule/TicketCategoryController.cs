@@ -17,16 +17,17 @@ using JS.AMSWeb.DTO.Shared;
 using JS.AMS.Data.Entity.AssetModule;
 using JS.AMS.Data.Entity.TicketModule;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetType;
+using JS.AMSWeb.Areas.TicketModule.ViewModels.TicketCategory;
 
 namespace JS.AMSWeb.Areas.TicketModule
 {
         [Area("TicketModule")]
-        public class TicketStatusController : Controller
+        public class TicketCategoryController : Controller
         {
             private readonly AMSDbContext _db;
             private readonly IWebHostEnvironment _webHostEnvironment;
 
-            public TicketStatusController(AMSDbContext db, IWebHostEnvironment webHostEnvironment)
+            public TicketCategoryController(AMSDbContext db, IWebHostEnvironment webHostEnvironment)
             {
                 _db = db;
                 _webHostEnvironment = webHostEnvironment;
@@ -42,7 +43,7 @@ namespace JS.AMSWeb.Areas.TicketModule
                     return Redirect("/");
                 }
 
-                var ticketStatus = _db.TicketStatuses
+                var ticketCategory = _db.TicketCategories
                     //.Include(m => m.Name)
                     //.Include(m => m.Code)
                     //.Include(m => m.Remark)
@@ -50,15 +51,15 @@ namespace JS.AMSWeb.Areas.TicketModule
 
                 if (!string.IsNullOrWhiteSpace(searchName))
                 {
-                    ticketStatus = ticketStatus.Where(x => x.Name.ToLower().Replace(" ", "").Contains(searchName.ToLower().Replace(" ", "")));
+                    ticketCategory = ticketCategory.Where(x => x.Name.ToLower().Replace(" ", "").Contains(searchName.ToLower().Replace(" ", "")));
                 }
 
-                var listVm = new List<TicketStatusViewModel>();
+                var listVm = new List<TicketCategoryViewModel>();
 
-                var ticketStatusList = ticketStatus.ToList();
-                foreach (var a in ticketStatusList)
+                var ticketCategoryList = ticketCategory.ToList();
+                foreach (var a in ticketCategoryList)
                 {
-                    var vm = new TicketStatusViewModel();
+                    var vm = new TicketCategoryViewModel();
                     vm.Id = a.Id;
                     vm.Name = a.Name;
                     vm.Code = a.Code;
@@ -74,9 +75,9 @@ namespace JS.AMSWeb.Areas.TicketModule
 
                 var listing = listVm.ToPagedList(pageNumber, pageSize);
 
-                var result = new TicketStatusPageViewModel();
+                var result = new TicketCategoryPageViewModel();
                 result.Listing = listing;
-                result.AddTicketStatusDTO = new AddTicketStatusViewModel();
+                result.AddTicketCategoryDTO = new AddTicketCategoryViewModel();
 
                 //ViewBag.CompanyProfiles = new SelectList(_db.CompanyProfiles.Where(x => x.Active), "Id", "Name");
                 //ViewBag.LocationTags = new SelectList(_db.LocationTags.Where(x => x.Active), "Id", "Name");
@@ -96,18 +97,18 @@ namespace JS.AMSWeb.Areas.TicketModule
             }
 
             [HttpPost]
-            public async Task<IActionResult> Create(AddTicketStatusViewModel dto)
+            public async Task<IActionResult> Create(AddTicketCategoryViewModel dto)
             {
                 try
                 {
 
-                var ticketStatus = new TicketStatus();
-                ticketStatus.Active = true;
-                ticketStatus.Name = dto.Name;
-                ticketStatus.Code = dto.Code;
-                ticketStatus.Remark = dto.Remark;
+                var ticketCategory = new TicketCategory();
+                ticketCategory.Active = true;
+                ticketCategory.Name = dto.Name;
+                ticketCategory.Code = dto.Code;
+                ticketCategory.Remark = dto.Remark;
 
-                _db.TicketStatuses.Add(ticketStatus);
+                _db.TicketCategories.Add(ticketCategory);
                 _db.SaveChanges("system");
 
                 return RedirectToAction("Index");
@@ -120,24 +121,24 @@ namespace JS.AMSWeb.Areas.TicketModule
 
             public IActionResult Edit(Guid id)
             {
-            var ticketStatus = _db.TicketStatuses
-           .FirstOrDefault(x => x.Id == id);
-            if (ticketStatus == null)
+            var ticketCategory = _db.TicketCategories
+                .FirstOrDefault(x => x.Id == id);
+            if (ticketCategory == null)
             {
                 return BadRequest("Asset Type not found");
             }
 
-            var vm = new ManageTicketStatusViewModel();
-            vm.Id = ticketStatus.Id;
-            vm.Name = ticketStatus.Name;
-            vm.Code = ticketStatus.Code;
-            vm.Remark = ticketStatus.Remark;
+            var vm = new ManageTicketCategoryViewModel();
+            vm.Id = ticketCategory.Id;
+            vm.Name = ticketCategory.Name;
+            vm.Code = ticketCategory.Code;
+            vm.Remark = ticketCategory.Remark;
 
             return View(vm);
         }
 
             [HttpPost]
-            public async Task<IActionResult> Edit(ManageTicketStatusViewModel dto)
+            public async Task<IActionResult> Edit(ManageTicketCategoryViewModel dto)
             {
                 var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
                 if (sessionData == null)
@@ -146,18 +147,18 @@ namespace JS.AMSWeb.Areas.TicketModule
                 }
             try
             {
-                var ticketStatus = _db.TicketStatuses
+                var ticketCategory = _db.TicketCategories
                     .FirstOrDefault(x => x.Id == dto.Id);
-                if (ticketStatus == null)
+                if (ticketCategory == null)
                 {
                     return BadRequest("Asset Type not found");
                 }
 
-                ticketStatus.Name = dto.Name;
-                ticketStatus.Code = dto.Code;
-                ticketStatus.Remark = dto.Remark;
+                ticketCategory.Name = dto.Name;
+                ticketCategory.Code = dto.Code;
+                ticketCategory.Remark = dto.Remark;
 
-                _db.TicketStatuses.Update(ticketStatus);
+                _db.TicketCategories.Update(ticketCategory);
                 await _db.SaveChangesAsync("system");
 
                 return RedirectToAction("Index");
@@ -175,43 +176,43 @@ namespace JS.AMSWeb.Areas.TicketModule
                 {
                 return Redirect("/");
                 }
-                var ticketStatus = _db.TicketStatuses
+                var ticketCategory = _db.TicketCategories
                     .FirstOrDefault(x => x.Id == id);
-                if (ticketStatus == null)
+                if (ticketCategory == null)
             {
                 return BadRequest("Asset Type not found");
             }
 
-                var vm = new ManageTicketStatusViewModel();
-                vm.Id = ticketStatus.Id;
-                vm.Name = ticketStatus.Name;
-                vm.Code = ticketStatus.Code;
-                vm.Remark = ticketStatus.Remark;
+                var vm = new ManageTicketCategoryViewModel();
+                vm.Id = ticketCategory.Id;
+                vm.Name = ticketCategory.Name;
+                vm.Code = ticketCategory.Code;
+                vm.Remark = ticketCategory.Remark;
 
                 return View(vm);
         }
 
             [HttpPost]
-            public async Task<IActionResult> Delete(ManageTicketStatusViewModel dto)
+            public async Task<IActionResult> Delete(ManageTicketCategoryViewModel dto)
             {
                 try
                 {
-                    var ticketStatus = _db.TicketStatuses
+                    var ticketCategory = _db.TicketCategories
                     .FirstOrDefault(x => x.Id == dto.Id);
-                    if (ticketStatus == null)
-                {
+                    if (ticketCategory == null)
+                    {
                     return BadRequest("Asset Type not found");
-                }
+                    }
 
-                    ticketStatus.Active = false;
+                    ticketCategory.Active = false;
 
-                    _db.TicketStatuses.Update(ticketStatus);
+                    _db.TicketCategories.Update(ticketCategory);
                     await _db.SaveChangesAsync("system");
 
                     return RedirectToAction("Index");
-                }
-                    catch (Exception ex)
-                {
+                    }
+                        catch (Exception ex)
+                    {
                     return BadRequest(ex.Message);
                 }
         }
