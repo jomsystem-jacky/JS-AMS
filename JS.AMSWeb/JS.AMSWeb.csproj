@@ -34,7 +34,6 @@
     <None Remove="Areas\Account\" />
     <None Remove="ApiController\" />
     <None Remove="DTO\Shared\" />
-    <None Remove="Areas\TicketModule\ViewModels\TicketStatus\TicketStatus\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
@@ -93,7 +92,6 @@
     <Folder Include="Areas\Account\" />
     <Folder Include="ApiController\" />
     <Folder Include="wwwroot\js\Shared\" />
-    <Folder Include="Areas\TicketModule\ViewModels\TicketStatus\TicketStatus\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\js\Shared\" />
