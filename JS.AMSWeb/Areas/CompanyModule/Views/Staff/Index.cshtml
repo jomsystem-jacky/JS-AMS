@@ -128,12 +128,17 @@
                                                                 <a asp-action="Delete" asp-route-id="@item.Id" class="menu-link px-3" title="Delete details">Delete</a>
                                                             </div>
                                                             <!--end::Menu item-->
+                                                            <!--begin::Menu item-->
+                                                            <div class="menu-item px-3">
+                                                                <a asp-action="Bind" asp-route-id="@item.Id" class="menu-link px-3" title="Delete details">Bind</a>
+                                                            </div>
+                                                            <!--end::Menu item-->
                                                         </div>
                                                         <!--end::Menu-->
                                                     </td>
                                                 </tr>
-                                            }
-                                        }
+                                             }
+                                         }
                                     </tbody>
                                     <!--end::Table body-->
                                 </table>

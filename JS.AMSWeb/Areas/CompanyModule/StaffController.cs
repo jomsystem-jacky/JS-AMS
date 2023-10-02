@@ -135,8 +135,10 @@ namespace JS.AMSWeb.Areas.CompanyModule
             {
                 return Redirect("/");
             }
+
             var staff = _db.Staff
                 .FirstOrDefault(x => x.Id == id);
+
             if (staff == null)
             {
                 return BadRequest("Company profile not found");
@@ -227,6 +229,78 @@ namespace JS.AMSWeb.Areas.CompanyModule
                 }
 
                 staff.Active = false;
+
+                _db.Staff.Update(staff);
+                await _db.SaveChangesAsync("system");
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        public IActionResult Bind(Guid id)
+        {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+            var staff = _db.Staff
+                .Include(m => m.UserAccount)
+                .FirstOrDefault(x => x.Id == id);
+
+            if (staff == null)
+            {
+                return BadRequest("Company profile not found");
+            }
+
+            var vm = new ManageStaffViewModel();
+            vm.BindedAccountUsername = staff.UserAccount?.UserName ?? "";
+            if (!string.IsNullOrWhiteSpace(vm.BindedAccountUsername))
+            {
+                vm.IsBindedAccount = true;
+            }
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Bind(ManageStaffViewModel dto)
+        {
+            try
+            {
+                var staff = _db.Staff
+                    .FirstOrDefault(x => x.Id == dto.Id);
+                if (staff == null)
+                {
+                    return BadRequest("Company profile not found");
+                }
+
+                if (!string.IsNullOrWhiteSpace(dto.BindNewAccountUsername))
+                {
+                    var userAccount = _db.UserAccounts
+                        .FirstOrDefault(x => x.UserName.Replace(" ", "").ToLower() == dto.BindNewAccountUsername.Replace(" ", "").ToLower());
+                    if (userAccount == null)
+                    {
+                        return BadRequest("User Account not found");
+                    }
+
+                    var existingStaffWithSameEmail = _db.Staff
+                    .AsEnumerable()
+                    .FirstOrDefault(s => s.UserAccount != null &&
+                                      s.UserAccount.UserName.Equals(dto.BindNewAccountUsername, StringComparison.OrdinalIgnoreCase));
+
+                    if (existingStaffWithSameEmail != null && existingStaffWithSameEmail.Id != staff.Id)
+                    {
+
+                        return BadRequest("The Account has bind by other User");
+                    }
+
+                    staff.UserAccount = userAccount;
+                }
 
                 _db.Staff.Update(staff);
                 await _db.SaveChangesAsync("system");
