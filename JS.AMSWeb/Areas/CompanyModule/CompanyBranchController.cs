@@ -62,7 +62,7 @@ namespace JS.AMSWeb.Areas.CompanyModule
                 vm.CompanyProfileId = a.CompanyProfileId;
                 vm.CompanyProfileName = a.CompanyProfile.Name;
                 vm.LocationTagId = a.LocationTagId;
-                vm.LocationTagName = a.LocationTag.Name;
+                //vm.LocationTagName = a.LocationTag.Name;
                 
                 listVm.Add(vm);
             }
