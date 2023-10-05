@@ -1,13 +1,8 @@
 ﻿using System.Data;
-using JS.AMSWeb.Data;
 using JS.AMSWeb.Areas.UserModule.ViewModels.AccessInfo;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using JS.AMS.Data;
-using Humanizer;
-using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMS.Data.Entity.User;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
@@ -68,6 +63,12 @@ namespace JS.AMSWeb.Areas.UserModule
         [HttpPost]
         public async Task<IActionResult> Create(AddAccessInfoViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             var accessInfo = new AccessInfo();
             accessInfo.Active = true;
             accessInfo.Name = dto.Name;
@@ -110,6 +111,12 @@ namespace JS.AMSWeb.Areas.UserModule
         [HttpPost]
         public async Task<IActionResult> Edit(ManageAccessInfoViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var accessInfo = _db.AccessInfos
@@ -142,6 +149,7 @@ namespace JS.AMSWeb.Areas.UserModule
             {
                 return Redirect("/");
             }
+
             var accessInfo = _db.AccessInfos
                 .FirstOrDefault(x => x.Id == id);
             if (accessInfo == null)
@@ -162,6 +170,12 @@ namespace JS.AMSWeb.Areas.UserModule
         [HttpPost]
         public async Task<IActionResult> Delete(ManageAccessInfoViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var accessInfo = _db.AccessInfos

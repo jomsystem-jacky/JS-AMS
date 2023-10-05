@@ -14,12 +14,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using JS.AMSWeb.Services.Core;
+using JS.AMSWeb.Services.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddTransient<FooterViewComponent>();
 
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IAzureBlobService, AzureBlobService>();
 
 builder.Services.Configure<MailKitEmailSenderOptions>
     (options => builder.Configuration.GetSection("MailKitEmailSenderOptions").Bind(options));

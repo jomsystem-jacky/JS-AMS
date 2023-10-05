@@ -1,16 +1,10 @@
 ﻿using System.Data;
-using JS.AMSWeb.Data;
 using JS.AMSWeb.Areas.UserModule.ViewModels.UserAccount;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using JS.AMS.Data;
-using Humanizer;
 using JS.AMSWeb.Utils;
-using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMS.Data.Entity.User;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Identity;
 using JS.AMSWeb.DTO.Identity;
 
@@ -75,6 +69,12 @@ namespace JS.AMSWeb.Areas.UserModule
         [HttpPost]
         public async Task<IActionResult> Create(AddUserAccountViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
 
@@ -102,7 +102,6 @@ namespace JS.AMSWeb.Areas.UserModule
                     return BadRequest("Username already exist! Please use another!");
                 }
 
-
                 var userAccount = new UserAccount();
                 userAccount.IsActive = true;
                 userAccount.UserName = dto.Username;
@@ -127,8 +126,6 @@ namespace JS.AMSWeb.Areas.UserModule
             }
 
         }
-
-
 
         public IActionResult Edit(string id)
         {
@@ -158,6 +155,12 @@ namespace JS.AMSWeb.Areas.UserModule
         [HttpPost]
         public async Task<IActionResult> Edit(ManageUserAccountViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var userAccount = _db.UserAccounts
@@ -213,6 +216,12 @@ namespace JS.AMSWeb.Areas.UserModule
         [HttpPost]
         public async Task<IActionResult> Delete(ManageUserAccountViewModel dto,string id)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var userAccount = _db.UserAccounts
@@ -238,6 +247,12 @@ namespace JS.AMSWeb.Areas.UserModule
 
         public IActionResult ChangePassword(string userId)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var user = _db.UserAccounts
@@ -261,6 +276,12 @@ namespace JS.AMSWeb.Areas.UserModule
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangeUserAccountPasswordViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var user = _db.UserAccounts.FirstOrDefault(x => x.Id == dto.UserId);

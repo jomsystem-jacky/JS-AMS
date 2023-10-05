@@ -1,15 +1,11 @@
 ﻿using System.Data;
 using JS.AMS.Data.Entity.CompanyModule;
-using JS.AMSWeb.Areas.CompanyModule.ViewModels.CompanyProfile;
-using JS.AMSWeb.Data;
 using JS.AMSWeb.Areas.CompanyModule.ViewModels.Staff;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using JS.AMS.Data;
-using Humanizer;
-using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
 using JS.AMSWeb.DTO.Shared;
@@ -30,13 +26,14 @@ namespace JS.AMSWeb.Areas.CompanyModule
 
         public IActionResult Index(int? page,string searchName)
         {
-            var pagination = new PaginationDTO();
-            pagination.CurrentPage = page ?? 1;
             var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
             if (sessionData == null)
             {
                 return Redirect("/");
             }
+
+            var pagination = new PaginationDTO();
+            pagination.CurrentPage = page ?? 1;
 
             var staff = _db.Staff
                 .Include(m => m.CompanyProfile)
@@ -87,6 +84,12 @@ namespace JS.AMSWeb.Areas.CompanyModule
         [HttpPost]
         public IActionResult Search(string? searchName,  int? page)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             if (page == 0 || page == null)
             {
                 page = 1;
@@ -98,6 +101,12 @@ namespace JS.AMSWeb.Areas.CompanyModule
         [HttpPost]
         public async Task<IActionResult> Create(AddStaffViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             var companyProfile = _db.CompanyProfiles
                 .FirstOrDefault(x => x.Id == dto.CompanyProfileId);
             if(companyProfile == null)
@@ -161,6 +170,12 @@ namespace JS.AMSWeb.Areas.CompanyModule
         [HttpPost]
         public async Task<IActionResult> Edit(ManageStaffViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var staff = _db.Staff
@@ -194,6 +209,7 @@ namespace JS.AMSWeb.Areas.CompanyModule
             {
                 return Redirect("/");
             }
+
             var staff = _db.Staff
                 .FirstOrDefault(x => x.Id == id);
             
@@ -219,6 +235,12 @@ namespace JS.AMSWeb.Areas.CompanyModule
         [HttpPost]
         public async Task<IActionResult> Delete(ManageStaffViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var staff = _db.Staff
@@ -270,6 +292,12 @@ namespace JS.AMSWeb.Areas.CompanyModule
         [HttpPost]
         public async Task<IActionResult> Bind(ManageStaffViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var staff = _db.Staff
@@ -290,8 +318,7 @@ namespace JS.AMSWeb.Areas.CompanyModule
 
                     var existingStaffWithSameEmail = _db.Staff
                     .AsEnumerable()
-                    .FirstOrDefault(s => s.UserAccount != null &&
-                                      s.UserAccount.UserName.Equals(dto.BindNewAccountUsername, StringComparison.OrdinalIgnoreCase));
+                    .FirstOrDefault(s => s.UserAccount != null && s.UserAccount.UserName.Equals(dto.BindNewAccountUsername, StringComparison.OrdinalIgnoreCase));
 
                     if (existingStaffWithSameEmail != null && existingStaffWithSameEmail.Id != staff.Id)
                     {

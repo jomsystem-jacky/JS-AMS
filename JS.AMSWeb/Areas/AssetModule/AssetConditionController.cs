@@ -1,17 +1,13 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using JS.AMS.Data;
-using Humanizer;
-using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetCondition;
 using JS.AMS.Data.Entity.AssetModule;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
 using JS.AMSWeb.DTO.Shared;
-using JS.AMS.Data.Entity.CompanyModule;
+
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -75,6 +71,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public IActionResult Search(string? searchName, int? page)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             if (page == 0 || page == null)
             {
                 page = 1;
@@ -86,6 +88,7 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Create(AddAssetConditionViewModel dto)
         {
+
             var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
             if (sessionData == null)
             {
@@ -131,6 +134,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Edit(ManageAssetConditionViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var AssetCondition = _db.AssetConditions
@@ -162,6 +171,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             {
                 return Redirect("/");
             }
+
             var AssetCondition = _db.AssetConditions
                 .FirstOrDefault(x => x.Id == id);
             if (AssetCondition == null)
@@ -181,6 +191,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Delete(ManageAssetConditionViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var AssetCondition = _db.AssetConditions

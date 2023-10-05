@@ -1,16 +1,12 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using JS.AMS.Data;
-using Humanizer;
-using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.SpecificationType;
 using JS.AMS.Data.Entity.AssetModule;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
-using JS.AMS.Data.Entity.CompanyModule;
+
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -75,6 +71,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public IActionResult Search(string? searchName, int? page)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             if (page == 0 || page == null)
             {
                 page = 1;
@@ -86,6 +88,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Create(AddSpecificationTypeViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             var SpecificationType = new SpecificationType();
             SpecificationType.Active = true;
             SpecificationType.Name = dto.Name;
@@ -106,6 +114,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             {
                 return Redirect("/");
             }
+
             var SpecificationType = _db.SpecificationTypes
                 .FirstOrDefault(x => x.Id == id);
             if (SpecificationType == null)
@@ -126,6 +135,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Edit(ManageSpecificationTypeViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var SpecificationType = _db.SpecificationTypes
@@ -158,6 +173,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             {
                 return Redirect("/");
             }
+
             var SpecificationType = _db.SpecificationTypes
                 .FirstOrDefault(x => x.Id == id);
             if (SpecificationType == null)
@@ -178,6 +194,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Delete(ManageSpecificationTypeViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var SpecificationType = _db.SpecificationTypes

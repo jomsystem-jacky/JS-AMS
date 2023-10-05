@@ -1,18 +1,13 @@
 ﻿using System.Data;
 using JS.AMS.Data.Entity.CompanyModule;
 using JS.AMSWeb.Areas.CompanyModule.ViewModels.CompanyProfile;
-using JS.AMSWeb.Data;
-using JS.AMSWeb.Areas.CompanyModule.ViewModels.CompanyProfile;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using JS.AMS.Data;
-using Humanizer;
-using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
 using JS.AMSWeb.DTO.Shared;
+
 
 namespace JS.AMSWeb.Areas.CompanyModule
 {
@@ -78,6 +73,12 @@ namespace JS.AMSWeb.Areas.CompanyModule
         [HttpPost]
         public IActionResult Search(string? searchName, int? page)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             if (page == 0 || page == null)
             {
                 page = 1;
@@ -89,6 +90,12 @@ namespace JS.AMSWeb.Areas.CompanyModule
         [HttpPost]
         public async Task<IActionResult> Create(AddCompanyProfileViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             var companyProfile = new CompanyProfile();
             companyProfile.Active = true;
             companyProfile.BRN = dto.BRN;
@@ -131,6 +138,12 @@ namespace JS.AMSWeb.Areas.CompanyModule
         [HttpPost]
         public async Task<IActionResult> Edit(ManageCompanyProfileViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var companyProfile = _db.CompanyProfiles
@@ -164,6 +177,7 @@ namespace JS.AMSWeb.Areas.CompanyModule
             {
                 return Redirect("/");
             }
+
             var companyProfile = _db.CompanyProfiles
                 .FirstOrDefault(x => x.Id == id);
             if (companyProfile == null)
@@ -185,6 +199,12 @@ namespace JS.AMSWeb.Areas.CompanyModule
         [HttpPost]
         public async Task<IActionResult> Delete(ManageCompanyProfileViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var companyProfile = _db.CompanyProfiles

@@ -4,12 +4,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using JS.AMS.Data;
-using Humanizer;
-using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetInfo;
 using JS.AMS.Data.Entity.AssetModule;
-using Microsoft.AspNetCore.Http.HttpResults;
-using JS.AMS.Data.Entity.CompanyModule;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetLocationHistory;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
@@ -86,6 +82,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public IActionResult Search(string? searchName, int? page)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             if (page == 0 || page == null)
             {
                 page = 1;
@@ -97,6 +99,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Create(AddAssetInfoViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try {
                 var companyProfile = _db.CompanyProfiles
                         .FirstOrDefault(x => x.Id == dto.CompanyProfileId);
@@ -141,6 +149,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             {
                 return Redirect("/");
             }
+
             var assetInfo = _db.AssetInfos
                 .FirstOrDefault(x => x.Id == id);
             if (assetInfo == null)
@@ -165,6 +174,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Edit(ManageAssetInfoViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var assetInfo = _db.AssetInfos
@@ -223,6 +238,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Delete(ManageAssetInfoViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var assetInfo = _db.AssetInfos
@@ -247,6 +268,12 @@ namespace JS.AMSWeb.Areas.AssetModule
 
         public IActionResult Assign(Guid assetInfoId)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             var assetInfo = _db.AssetInfos
                 .FirstOrDefault(x => x.Id == assetInfoId);
             if (assetInfo == null)
@@ -268,6 +295,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public IActionResult Assign(AssignAssetInfoViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             var assetInfo = _db.AssetInfos
                 .FirstOrDefault(x => x.Id == dto.AssetInfoId);
             var LocationTag = _db.LocationTags
@@ -295,6 +328,12 @@ namespace JS.AMSWeb.Areas.AssetModule
 
         public IActionResult History(int? page, Guid assetInfoId)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             var assetInfo = _db.AssetLocationHistories
                 .Include(m => m.AssetInfo)
                 .Include(m => m.LocationTag)

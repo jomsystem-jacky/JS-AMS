@@ -1,9 +1,9 @@
-﻿@using JS.AMSWeb.Areas.TicketModule.ViewModels.TicketCategory;
+﻿@using JS.AMSWeb.Areas.TicketModule.ViewModels.TicketInfo;
 @using X.PagedList.Mvc.Core
-@model TicketCategoryPageViewModel
+@model TicketInfoPageViewModel
 
 @{
-    ViewData["Title"] = "Ticket Category List";
+    ViewData["Title"] = "Ticket Status List";
 }
 
 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
@@ -17,7 +17,7 @@
                     <!--begin::Page title-->
                     <div class="page-title d-flex flex-column justify-content-center me-3">
                         <!--begin::Title-->
-                        <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Ticket Category Listing</h1>
+                        <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Ticket Status Listing</h1>
                         <!--end::Title-->
                         <!--begin::Breadcrumb-->
                         <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -32,7 +32,7 @@
                             </li>
                             <!--end::Item-->
                             <!--begin::Item-->
-                            <li class="breadcrumb-item text-muted">Ticket Category</li>
+                            <li class="breadcrumb-item text-muted">Ticket Status</li>
                             <!--end::Item-->
                             <!--begin::Item-->
                             <li class="breadcrumb-item">
@@ -53,7 +53,7 @@
                         <!--begin::Secondary button-->
                         <!--end::Secondary button-->
                         <!--begin::Primary button-->
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_ticket" class="btn btn-primary fw-bold fs-8 fs-lg-base">Add New Ticket Category</a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_ticket" class="btn btn-primary fw-bold fs-8 fs-lg-base">Add New ticket status</a>
                         <!--end::Primary button-->
                     </div>
                     <!--end::Actions-->
@@ -72,7 +72,7 @@
                             <!--begin::Search-->
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
-                                    <input type="text" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Ticket Category" id="SearchName" name="SearchName" value="@ViewData["SearchName"]">
+                                    <input type="text" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search Ticket Status" id="SearchName" name="SearchName" value="@ViewData["SearchName"]">
                             </div>
                             <!--end::Search-->
                         </div>
@@ -90,9 +90,11 @@
                                 <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_customers_table">
                                     <thead>
                                         <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Name" style="width: 30%">Name</th>
-                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="BRN" style="width: 30% ">Code</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Name" style="width: 30%">CompanyName</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Name" style="width: 30%">TicketCategoryId</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="BRN" style="width: 30% ">Staff</th>
                                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="BRN" style="width: 30% ">Remark</th>
+                                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_customers_table" rowspan="1" colspan="1" aria-label="Name" style="width: 30%">CoverPhotoId</th>
                                             <th class="text-end min-w-70px sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 102.640625px;">Actions</th>
                                         </tr>
                                     </thead>
@@ -102,9 +104,11 @@
                                             @foreach (var item in Model.Listing)
                                             {
                                                 <tr role="row" class="odd">
-                                                    <td>@item.Name</td>
-                                                    <td>@item.Code</td>
+                                                    <td>@item.CompanyCategory</td>
+                                                    <td>@item.TicketCategoryName</td>
+                                                    <td>@item.TicketRaisedByStaffName</td>
                                                     <td>@item.Remark</td>
+                                                    <td>@item.CoverPhotoId</td>
                                                     <td>
                                                         <a href="#" class="btn btn-light btn-flex btn-center btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                                             Actions
@@ -160,11 +164,11 @@
                             <!--begin::Modal body-->
                             <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
                                 <!--begin:Form-->
-                                <form id="kt_modal_new_ticket_form" class="form fv-plugins-bootstrap5 fv-plugins-framework" asp-action="Create">
+                                <form id="kt_modal_new_ticket_form" class="form fv-plugins-bootstrap5 fv-plugins-framework" asp-action="Create" enctype="multipart/form-data">
                                     <!--begin::Heading-->
                                     <div class="mb-13 text-center">
                                         <!--begin::Title-->
-                                        <h1 class="mb-3">Add Ticket Category</h1>
+                                        <h1 class="mb-3">Add Asset Type</h1>
                                         <!--end::Title-->
                                         <!--begin::Description-->
                                         @*<div class="text-gray-400 fw-semibold fs-5">
@@ -177,23 +181,31 @@
                                     <!--begin::Input group-->
                                     <div class="row g-9 mb-8">
                                         <!--begin::Col-->
-                                        <div class="col-md-6 fv-row">
-                                            <label class="required fs-6 fw-semibold mb-2">Name</label>
-                                        <input asp-for="AddTicketCategoryDTO.Name" type="text" class="form-control form-control-solid" placeholder="Enter asset type name" name="Name">
+                                        <div class="col-md-6 fv-row fv-plugins-icon-container">
+                                            <label class="required fs-6 fw-semibold mb-2">Ticket Category</label>
+                                            <select asp-for="AddTicketInfoDTO.TicketCategoryId" type="text" class="form-control form-control-solid" asp-items="ViewBag.TicketCategories" name="TicketCategoryId">
+                                            </select>
                                         </div>
                                         <!--end::Col-->
                                         <!--begin::Col-->
                                         <div class="col-md-6 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-semibold mb-2">Code</label>
-                                        <input type="text" asp-for="AddTicketCategoryDTO.Code" class="form-control form-control-solid" placeholder="Enter code" name="Code">
+                                            <label class="required fs-6 fw-semibold mb-2">Staff</label>
+                                            <select asp-for="AddTicketInfoDTO.TicketRaisedByStaffId" type="text" class="form-control form-control-solid" asp-items="ViewBag.TicketRaisedByStaff" name="TicketRaisedByStaffId">
+                                            </select>
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row fv-plugins-icon-container">
+                                            <label class="required fs-6 fw-semibold mb-2">Remark</label>
+                                            <input type="text" asp-for="AddTicketInfoDTO.Remark" class="form-control form-control-solid" placeholder="Enter remark" name="Remark">
                                             <!--end::Input-->
                                             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                                         </div>
                                         <!--end::Col-->
                                         <!--begin::Col-->
                                         <div class="col-md-6 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-semibold mb-2">Remark</label>
-                                        <input type="text" asp-for="AddTicketCategoryDTO.Remark" class="form-control form-control-solid" placeholder="Enter remark" name="Remark">
+                                            <label class="required fs-6 fw-semibold mb-2">File</label>
+                                            <input type="file" asp-for="AddTicketInfoDTO.Files" class="form-control form-control-solid" multiple name="Files">
                                             <!--end::Input-->
                                             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                                         </div>

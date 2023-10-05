@@ -6,6 +6,7 @@ using JS.AMS.Data.Entity.AssetModule;
 using Microsoft.EntityFrameworkCore;
 using System;
 using JS.AMS.Data.Entity.TicketModule;
+using JS.AMS.Data.Entity.Shared;
 
 namespace JS.AMS.Data
 {
@@ -44,6 +45,8 @@ namespace JS.AMS.Data
         public DbSet<TicketCategory> TicketCategories { get; set; }
         public DbSet<TicketHistory> TicketHistories { get; set; }
         public DbSet<TicketHistoryMedia> TicketHistoryMedias { get; set; }
+
+        public DbSet<Media> Medias { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

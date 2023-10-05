@@ -1,15 +1,11 @@
 ﻿using System.Data;
-using JS.AMSWeb.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using JS.AMS.Data;
 using JS.AMS.Data.Entity.User;
 using Microsoft.AspNetCore.Identity;
 using JS.AMSWeb.Areas.UserModule.ViewModels.UserAccountAccess;
-using JS.AMSWeb.Areas.UserModule.ViewModels.AccountAccess;
-using Humanizer;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
 
@@ -100,6 +96,12 @@ namespace JS.AMSWeb.Areas.UserModule
         [HttpPost]
         public async Task<IActionResult> Create(AddUserAccountAccessViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
 

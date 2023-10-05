@@ -1,17 +1,12 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using JS.AMS.Data;
-using Humanizer;
-using DocumentFormat.OpenXml.Wordprocessing;
 using JS.AMSWeb.Areas.AssetModule.ViewModels.AssetType;
 using JS.AMS.Data.Entity.AssetModule;
 using JS.AMSWeb.DTO.Identity;
 using JS.AMSWeb.Utils;
 using JS.AMSWeb.DTO.Shared;
-using JS.AMS.Data.Entity.CompanyModule;
 
 namespace JS.AMSWeb.Areas.AssetModule
 {
@@ -74,6 +69,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public IActionResult Search(string? searchName, int? page)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             if (page == 0 || page == null)
             {
                 page = 1;
@@ -85,6 +86,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Create(AddAssetTypeViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             var assetType = new AssetType();
             assetType.Active = true;
             assetType.Name = dto.Name; 
@@ -122,6 +129,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             {
                 return Redirect("/");
             }
+
             try
             {
                 var assetType = _db.AssetTypes
@@ -153,6 +161,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             {
                 return Redirect("/");
             }
+
             var assetType = _db.AssetTypes
                 .FirstOrDefault(x => x.Id == id);
             if (assetType == null)
@@ -172,6 +181,12 @@ namespace JS.AMSWeb.Areas.AssetModule
         [HttpPost]
         public async Task<IActionResult> Delete(ManageAssetTypeViewModel dto)
         {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
             try
             {
                 var assetType = _db.AssetTypes
