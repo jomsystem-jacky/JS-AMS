@@ -7,7 +7,9 @@ namespace JS.AMSWeb.Areas.TicketModule.ViewModels.TicketInfo
 {
 	public class AddTicketInfoViewModel
     {
+        public Guid Id { get; set; }
         public Guid CompanyProfileId { get; set; }
+        public string CompanyName { get; set; }
         public Guid TicketCategoryId { get; set; }
         public Guid TicketRaisedByStaffId { get; set; }
 

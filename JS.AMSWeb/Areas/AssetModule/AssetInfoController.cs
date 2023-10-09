@@ -24,7 +24,7 @@ namespace JS.AMSWeb.Areas.AssetModule
             _db = db;
             _webHostEnvironment = webHostEnvironment;
         }
-        public IActionResult Index(int? page,string searchName)
+        public IActionResult Index(int? page, string searchName)
         {
             var pagination = new PaginationDTO();
             pagination.CurrentPage = page ?? 1;
@@ -105,7 +105,8 @@ namespace JS.AMSWeb.Areas.AssetModule
                 return Redirect("/");
             }
 
-            try {
+            try
+            {
                 var companyProfile = _db.CompanyProfiles
                         .FirstOrDefault(x => x.Id == dto.CompanyProfileId);
 
@@ -136,7 +137,7 @@ namespace JS.AMSWeb.Areas.AssetModule
 
                 return RedirectToAction("Index");
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 return Ok(ex);
             }
@@ -194,7 +195,7 @@ namespace JS.AMSWeb.Areas.AssetModule
                 assetInfo.Remark = dto.Remark;
                 assetInfo.CompanyProfileId = dto.CompanyProfileId;
                 assetInfo.AssetTypeId = dto.AssetTypeId;
-                
+
                 _db.AssetInfos.Update(assetInfo);
                 await _db.SaveChangesAsync("system");
 

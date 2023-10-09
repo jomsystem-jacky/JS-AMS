@@ -41,13 +41,13 @@ namespace JS.AMSWeb.Areas.TicketModule
             }
 
             var ticketInfo = _db.TicketInfos
-                .Include(m => m.TicketRaisedByStaff)
+                .Include(m => m.TicketRaisedByStaff).ThenInclude(m => m.CompanyProfile)
                 .Include(m => m.TicketCategory)
                 .Where(x => x.Active);
 
             //if (!string.IsNullOrWhiteSpace(searchName))
             //{
-                //assetInfo = assetInfo.Where(x => x.Name.ToLower().Replace(" ", "").Contains(searchName.ToLower().Replace(" ", "")));
+            //assetInfo = assetInfo.Where(x => x.Name.ToLower().Replace(" ", "").Contains(searchName.ToLower().Replace(" ", "")));
             //}
 
             var listVm = new List<TicketInfoViewModel>();
@@ -62,10 +62,11 @@ namespace JS.AMSWeb.Areas.TicketModule
                 vm.TicketCategoryName = a.TicketCategory.Name;
                 vm.TicketRaisedByStaffId = a.TicketRaisedByStaffId;
                 vm.TicketRaisedByStaffName = a.TicketRaisedByStaff.Name;
+                vm.CompanyName = a.TicketRaisedByStaff.CompanyProfile.Name;
 
                 //if (a.CoverPhotoId.HasValue)
                 //{
-                //    vm.CoverPhotoUrl = _azureBlobService.GetBlobUrl(a.CoverPhoto.Url, ImageContainer.PAYMENT_METHOD_IMAGE_CONTAINER);
+                //    vm.CoverPhotoUrl = _azureBlobService.GetBlobUrl(a.CoverPhoto.Url, ImageContainer.TICKET_METHOD_IMAGE_CONTAINER);
                 //}
 
                 listVm.Add(vm);
@@ -84,107 +85,232 @@ namespace JS.AMSWeb.Areas.TicketModule
 
             ViewBag.TicketRaisedByStaff = new SelectList(_db.Staff.Where(x => x.Active), "Id", "Name");
             ViewBag.TicketCategories = new SelectList(_db.TicketCategories.Where(x => x.Active), "Id", "Name");
+            ViewBag.CompanyProfile = new SelectList(_db.CompanyProfiles.Where(x => x.Active), "Id", "Name");
+
             return View(result);
         }
 
         //[HttpPost]
         //public IActionResult Search(string? searchName, int? page)
         //{
-            //if (page == 0 || page == null)
-            //{
-                //page = 1;
-            //}
-
-            //return RedirectToAction("Index", new { page = page, searchName = searchName });
+        //if (page == 0 || page == null)
+        //{
+        //page = 1;
         //}
 
-    [HttpPost]
-    public async Task<IActionResult> Create(AddTicketInfoViewModel dto)
-    {
-        var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
-        if (sessionData == null)
-        {
-            return Redirect("/");
-        }
+        //return RedirectToAction("Index", new { page = page, searchName = searchName });
+        //}
 
-        try
+        [HttpPost]
+        public async Task<IActionResult> Create(AddTicketInfoViewModel dto)
         {
-            var staff = _db.Staff
-                .FirstOrDefault(x => x.Id == dto.TicketRaisedByStaffId);
-            if (staff == null)
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
             {
-                return BadRequest("Staff not found");
+                return Redirect("/");
             }
 
-            var ticketCategory = _db.TicketCategories
-                .FirstOrDefault(x => x.Id == dto.TicketCategoryId);
-            if (ticketCategory == null)
+            try
             {
-                return BadRequest("Ticket Category not found");
-            }
-
-            var companyProfile = _db.CompanyProfiles
-                .FirstOrDefault(x => x.Id == dto.CompanyProfileId);
-            if (ticketCategory == null)
-            {
-                return BadRequest("company Category not found");
-            }
-
-            var ticketInfo = new TicketInfo();
-            ticketInfo.Active = true;
-            ticketInfo.Remark = dto.Remark;
-            ticketInfo.TicketCategory = ticketCategory;
-            ticketInfo.TicketRaisedByStaff = staff;
-
-            _db.TicketInfos.Add(ticketInfo);
-            _db.SaveChanges(sessionData.Username);
-
-            var ticketHistory = new TicketHistory();
-            ticketHistory.Active = true;
-            ticketHistory.Remark = dto.Remark;
-            ticketHistory.OtherDescription = dto.OtherDescription;
-            ticketHistory.TicketInfo = ticketInfo;
-
-            _db.TicketHistories.Add(ticketHistory);
-            _db.SaveChanges(sessionData.Username);
-
-        foreach (var file in dto.Files)
-        {
-            if (file.Length > 0)
-            {
-                var filePath = await ImageHelper.GetTempUploadedFilePath(file);
-
-                var media = new Media();
-                media.Name = $"{file.FileName}".ToUpper();
-                media.Url = $"{media.Name}-{Guid.NewGuid()}";
-                media.Active = true;
-                media.MediaType = MediaTypeEnum.Image;
-
-                _db.Medias.Add(media);
-                _db.SaveChanges(sessionData.Username);
-
-                var uploadedImage = _azureBlobService.AddImage(media.Url, filePath, ImageContainer.PAYMENT_METHOD_IMAGE_CONTAINER);
-                if (!uploadedImage)
+                var staff = _db.Staff
+                    .FirstOrDefault(x => x.Id == dto.TicketRaisedByStaffId);
+                if (staff == null)
                 {
-                    return BadRequest("Image blob upload failed");
+                    return BadRequest("Staff not found");
                 }
-    
-                var ticketHistoryMedia = new TicketHistoryMedia();
-                ticketHistoryMedia.Active = true;
-                ticketHistoryMedia.Media = media;
-                ticketHistoryMedia.TicketHistory = ticketHistory;
 
-                _db.TicketHistoryMedias.Add(ticketHistoryMedia);
+                var ticketCategory = _db.TicketCategories
+                    .FirstOrDefault(x => x.Id == dto.TicketCategoryId);
+                if (ticketCategory == null)
+                {
+                    return BadRequest("Ticket Category not found");
+                }
+
+                var companyProfile = _db.CompanyProfiles
+                    .FirstOrDefault(x => x.Id == dto.CompanyProfileId);
+                if (companyProfile == null)
+                {
+                    return BadRequest("company Name not found");
+                }
+
+                var ticketInfo = new TicketInfo();
+                ticketInfo.Active = true;
+                ticketInfo.Remark = dto.Remark;
+                ticketInfo.TicketCategory = ticketCategory;
+                ticketInfo.TicketRaisedByStaff = staff;
+                ticketInfo.TicketRaisedByStaff.CompanyProfile = companyProfile;
+
+                _db.TicketInfos.Add(ticketInfo);
                 _db.SaveChanges(sessionData.Username);
+
+                var ticketHistory = new TicketHistory();
+                ticketHistory.Active = true;
+                ticketHistory.Remark = dto.Remark;
+                ticketHistory.OtherDescription = dto.OtherDescription;
+                ticketHistory.TicketInfo = ticketInfo;
+
+                _db.TicketHistories.Add(ticketHistory);
+                _db.SaveChanges(sessionData.Username);
+
+                foreach (var file in dto.Files)
+                {
+                    if (file.Length > 0)
+                    {
+                        var filePath = await ImageHelper.GetTempUploadedFilePath(file);
+
+                        var media = new Media();
+                        media.Name = $"{file.FileName}".ToUpper();
+                        media.Url = $"{media.Name}-{Guid.NewGuid()}";
+                        media.Active = true;
+                        media.MediaType = MediaTypeEnum.Image;
+
+                        _db.Medias.Add(media);
+                        _db.SaveChanges(sessionData.Username);
+
+                        var uploadedImage = _azureBlobService.AddImage(media.Url, filePath, ImageContainer.TICKET_METHOD_IMAGE_CONTAINER);
+                        if (!uploadedImage)
+                        {
+                            return BadRequest("Image blob upload failed");
+                        }
+
+                        var ticketHistoryMedia = new TicketHistoryMedia();
+                        ticketHistoryMedia.Active = true;
+                        ticketHistoryMedia.Media = media;
+                        ticketHistoryMedia.TicketHistory = ticketHistory;
+
+                        _db.TicketHistoryMedias.Add(ticketHistoryMedia);
+                        _db.SaveChanges(sessionData.Username);
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex);
+            }
+
+        }
+
+        public IActionResult Edit(Guid id)
+        {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
+            var ticketInfo = _db.TicketInfos
+                .FirstOrDefault(x => x.Id == id);
+            if (ticketInfo == null)
+            {
+                return BadRequest("ticketInfo not found");
+            }
+
+            var vm = new ManageTicketInfoViewModel();
+            vm.Id = id;
+            vm.TicketCategoryId = ticketInfo.TicketCategoryId;
+            vm.TicketRaisedByStaffId = ticketInfo.TicketRaisedByStaffId;
+            vm.Remark = ticketInfo.Remark;
+
+            ViewBag.TicketRaisedByStaff = new SelectList(_db.Staff.Where(x => x.Active), "Id", "Name");
+            ViewBag.TicketCategories = new SelectList(_db.TicketCategories.Where(x => x.Active), "Id", "Name");
+            ViewBag.CompanyProfile = new SelectList(_db.CompanyProfiles.Where(x => x.Active), "Id", "Name");
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ManageTicketInfoViewModel dto)
+        {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
+            try
+            {
+                var ticketInfo = _db.TicketInfos
+                .FirstOrDefault(x => x.Id == dto.Id);
+                if (ticketInfo == null)
+                {
+                    return BadRequest("ticketInfo not found");
+                }
+
+                ticketInfo.Id = dto.Id;
+                ticketInfo.TicketCategoryId = dto.TicketCategoryId;
+                ticketInfo.TicketRaisedByStaffId = dto.TicketRaisedByStaffId;
+                ticketInfo.Remark = dto.Remark;
+
+                _db.TicketInfos.Update(ticketInfo);
+                await _db.SaveChangesAsync("system");
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
-            return RedirectToAction("Index");
-        }
-            catch (Exception ex)
+
+        public IActionResult Delete(Guid id)
         {
-            return Ok(ex);
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
+            var ticketInfo = _db.TicketInfos
+                .FirstOrDefault(x => x.Id == id);
+            if (ticketInfo == null)
+            {
+                return BadRequest("ticketInfo not found");
+            }
+
+            var vm = new ManageTicketInfoViewModel();
+            vm.Id = id;
+            vm.TicketCategoryId = ticketInfo.TicketCategoryId;
+            vm.TicketRaisedByStaffId = ticketInfo.TicketRaisedByStaffId;
+            vm.Remark = ticketInfo.Remark;
+
+            ViewBag.TicketRaisedByStaff = new SelectList(_db.Staff.Where(x => x.Active), "Id", "Name");
+            ViewBag.TicketCategories = new SelectList(_db.TicketCategories.Where(x => x.Active), "Id", "Name");
+            ViewBag.CompanyProfile = new SelectList(_db.CompanyProfiles.Where(x => x.Active), "Id", "Name");
+
+            return View(vm);
         }
-    }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(ManageTicketInfoViewModel dto)
+        {
+            var sessionData = HttpContext.Session?.GetObjectFromJson<UserSessionDTO>("UserSession") ?? null;
+            if (sessionData == null)
+            {
+                return Redirect("/");
+            }
+
+            try
+            {
+                var ticketInfo = _db.TicketInfos
+                .FirstOrDefault(x => x.Id == dto.Id);
+                if (ticketInfo == null)
+                {
+                    return BadRequest("ticketInfo not found");
+                }
+
+                ticketInfo.Active = false;
+
+                _db.TicketInfos.Update(ticketInfo);
+                await _db.SaveChangesAsync("system");
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }

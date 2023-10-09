@@ -15,7 +15,7 @@ namespace JS.AMSWeb.Areas.TicketModule.ViewModels.TicketInfo
 
         public Guid CoverPhotoId { get; set; }
 
-        public Guid CompanyCategory;
+        public string CompanyName { get; set; }
         
         public Guid TicketCategoryId { get; set; }
         public string TicketCategoryName { get; set; }
