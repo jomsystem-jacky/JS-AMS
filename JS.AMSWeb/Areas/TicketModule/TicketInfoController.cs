@@ -12,6 +12,8 @@ using JS.AMS.Data.Entity.TicketModule;
 using JS.AMS.Data.Entity.Shared.Enum;
 using JS.AMS.Data.Entity.Shared;
 using JS.AMSWeb.Services.Azure;
+using DocumentFormat.OpenXml.Office2010.Excel;
+
 
 namespace JS.AMSWeb.Areas.TicketModule
 {
@@ -43,12 +45,13 @@ namespace JS.AMSWeb.Areas.TicketModule
             var ticketInfo = _db.TicketInfos
                 .Include(m => m.TicketRaisedByStaff).ThenInclude(m => m.CompanyProfile)
                 .Include(m => m.TicketCategory)
+                .Include(m => m.TicketHistories).ThenInclude(m => m.TicketStatus)
                 .Where(x => x.Active);
 
-            //if (!string.IsNullOrWhiteSpace(searchName))
-            //{
-            //assetInfo = assetInfo.Where(x => x.Name.ToLower().Replace(" ", "").Contains(searchName.ToLower().Replace(" ", "")));
-            //}
+            if (!string.IsNullOrWhiteSpace(searchName))
+            {
+                ticketInfo = ticketInfo.Where(x => x.TicketRaisedByStaff.Name.ToLower().Replace(" ", "").Contains(searchName.ToLower().Replace(" ", "")));
+            }
 
             var listVm = new List<TicketInfoViewModel>();
 
@@ -63,6 +66,7 @@ namespace JS.AMSWeb.Areas.TicketModule
                 vm.TicketRaisedByStaffId = a.TicketRaisedByStaffId;
                 vm.TicketRaisedByStaffName = a.TicketRaisedByStaff.Name;
                 vm.CompanyName = a.TicketRaisedByStaff.CompanyProfile.Name;
+                vm.CurrentTicketStatus = a.TicketHistories?.OrderByDescending(x => x.CreatedAt)?.Select(x => x.TicketStatus)?.FirstOrDefault()?.Name ?? "Unknown";
 
                 //if (a.CoverPhotoId.HasValue)
                 //{
@@ -75,7 +79,7 @@ namespace JS.AMSWeb.Areas.TicketModule
             int pageSize = 10;
             int pageNumber = page ?? 1;
 
-            //ViewData["SearchName"] = searchName;
+            ViewData["SearchName"] = searchName;
 
             var listing = listVm.ToPagedList(pageNumber, pageSize);
 
@@ -90,16 +94,16 @@ namespace JS.AMSWeb.Areas.TicketModule
             return View(result);
         }
 
-        //[HttpPost]
-        //public IActionResult Search(string? searchName, int? page)
-        //{
-        //if (page == 0 || page == null)
-        //{
-        //page = 1;
-        //}
+        [HttpPost]
+        public IActionResult Search(string? searchName, int? page)
+        {
+            if (page == 0 || page == null)
+            {
+                page = 1;
+            }
 
-        //return RedirectToAction("Index", new { page = page, searchName = searchName });
-        //}
+            return RedirectToAction("Index", new { page = page, searchName = searchName });
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(AddTicketInfoViewModel dto)
@@ -149,6 +153,15 @@ namespace JS.AMSWeb.Areas.TicketModule
                 ticketHistory.OtherDescription = dto.OtherDescription;
                 ticketHistory.TicketInfo = ticketInfo;
 
+                var ticketStatus = _db.TicketStatuses
+                    .FirstOrDefault(x => x.Code == "001");
+                if (ticketStatus == null)
+                {
+                    return BadRequest("Ticket Status not found");
+                }
+
+                ticketHistory.TicketStatus = ticketStatus;
+
                 _db.TicketHistories.Add(ticketHistory);
                 _db.SaveChanges(sessionData.Username);
 
@@ -188,7 +201,6 @@ namespace JS.AMSWeb.Areas.TicketModule
             {
                 return Ok(ex);
             }
-
         }
 
         public IActionResult Edit(Guid id)
@@ -293,7 +305,8 @@ namespace JS.AMSWeb.Areas.TicketModule
             try
             {
                 var ticketInfo = _db.TicketInfos
-                .FirstOrDefault(x => x.Id == dto.Id);
+                    .FirstOrDefault(x => x.Id == dto.Id);
+               
                 if (ticketInfo == null)
                 {
                     return BadRequest("ticketInfo not found");
@@ -311,7 +324,6 @@ namespace JS.AMSWeb.Areas.TicketModule
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }
 

@@ -23,7 +23,9 @@ namespace JS.AMSWeb.Areas.TicketModule.ViewModels.TicketInfo
         public Guid TicketRaisedByStaffId { get; set; }
         public string TicketRaisedByStaffName { get; set; }
 
-        public List<TicketHistory> TicketHistories { get; set; } = new List<TicketHistory>();
+        public string CurrentTicketStatus { get; set; }
+
+        //public List<TicketHistory> TicketHistories { get; set; } = new List<TicketHistory>();
     }
 }
 

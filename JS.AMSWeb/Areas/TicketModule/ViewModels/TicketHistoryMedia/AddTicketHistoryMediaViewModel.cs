@@ -8,7 +8,7 @@ namespace JS.AMSWeb.Areas.TicketModule.ViewModels.TicketHistoryMedia
 	public class AddTicketHistoryMediaViewModel
     {
         public Guid TicketHistoryId { get; set; }
-        public TicketHistory TicketHistory { get; set; }
+        //public TicketHistory TicketHistory { get; set; }
 
         public Guid MediaId { get; set; }
         //public Media Media { get; set; }

@@ -9,7 +9,7 @@ namespace JS.AMSWeb.Areas.TicketModule.ViewModels.TicketHistoryMedia
     {
         public Guid Id { get; set; }
         public Guid TicketHistoryId { get; set; }
-        public TicketHistory TicketHistory { get; set; }
+        //public TicketHistory TicketHistory { get; set; }
 
         public Guid MediaId { get; set; }
         //public Media Media { get; set; }
